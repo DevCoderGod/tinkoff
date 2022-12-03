@@ -1,0 +1,19 @@
+{
+  "name": "express_template",
+  "version": "0.1.0",
+  "author": "devcodergod",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "dev:server": "npm run start --prefix server",
+    "prod:server": "npm run prod --prefix server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^7.4.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  }
+}
