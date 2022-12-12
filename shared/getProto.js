@@ -12,6 +12,7 @@ file.on('close',async ()=>{
 	try {
 		console.log(' Распаковка ')
 		await azip.extractAllTo(__dirname,true)
+		await fs.mkdir('./shared/tsproto',()=>{})
 	} catch (e) { 
 		console.log('Ошибка распаковки: ',e)
 	}
