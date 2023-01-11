@@ -1,0 +1,14 @@
+{
+  "name": "shared_sources",
+  "version": "0.0.1",
+  "author": "devcodergod",
+  "description": "shared types, models, proto etc.",
+  "type": "module",
+  "scripts": {
+    "tsc": "tsc"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  }
+}
