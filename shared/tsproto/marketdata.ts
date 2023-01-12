@@ -197,7 +197,7 @@ export interface CandleInstrument {
     /**
      * @generated from protobuf field: string figi = 1;
      */
-    figi: string; // Figi-идентификатор инструмента.
+    figi: string; // Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.SubscriptionInterval interval = 2;
      */
@@ -269,7 +269,7 @@ export interface OrderBookInstrument {
     /**
      * @generated from protobuf field: string figi = 1;
      */
-    figi: string; // Figi-идентификатор инструмента.
+    figi: string; // Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
     /**
      * @generated from protobuf field: int32 depth = 2;
      */
@@ -341,7 +341,7 @@ export interface TradeInstrument {
     /**
      * @generated from protobuf field: string figi = 1;
      */
-    figi: string; // Figi-идентификатор инструмента.
+    figi: string; // Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
     /**
      * @generated from protobuf field: string instrument_id = 2;
      */
@@ -405,7 +405,7 @@ export interface InfoInstrument {
     /**
      * @generated from protobuf field: string figi = 1;
      */
-    figi: string; // Figi-идентификатор инструмента.
+    figi: string; // Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
     /**
      * @generated from protobuf field: string instrument_id = 2;
      */
@@ -469,7 +469,7 @@ export interface LastPriceInstrument {
     /**
      * @generated from protobuf field: string figi = 1;
      */
-    figi: string; // Figi-идентификатор инструмента.
+    figi: string; // Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
     /**
      * @generated from protobuf field: string instrument_id = 2;
      */
@@ -685,7 +685,7 @@ export interface GetCandlesRequest {
     /**
      * @generated from protobuf field: string figi = 1;
      */
-    figi: string; // Figi-идентификатор инструмента.
+    figi: string; // Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
     /**
      * @generated from protobuf field: google.protobuf.Timestamp from = 2;
      */
@@ -701,7 +701,7 @@ export interface GetCandlesRequest {
     /**
      * @generated from protobuf field: string instrument_id = 5;
      */
-    instrumentId: string; // Идентификатор инструмента, принимает значение figi или instrument_uid
+    instrumentId: string; // Идентификатор инструмента, принимает значение figi или instrument_uid.
 }
 /**
  * Список свечей.
@@ -758,11 +758,11 @@ export interface GetLastPricesRequest {
     /**
      * @generated from protobuf field: repeated string figi = 1;
      */
-    figi: string[]; // Массив figi-идентификаторов инструментов.
+    figi: string[]; // Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
     /**
      * @generated from protobuf field: repeated string instrument_id = 2;
      */
-    instrumentId: string[]; // Массив идентификаторов инструмента, принимает значения figi или instrument_uid
+    instrumentId: string[]; // Массив идентификаторов инструмента, принимает значения figi или instrument_uid.
 }
 /**
  * Список цен последних сделок.
@@ -807,7 +807,7 @@ export interface GetOrderBookRequest {
     /**
      * @generated from protobuf field: string figi = 1;
      */
-    figi: string; // Figi-идентификатор инструмента.
+    figi: string; // Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
     /**
      * @generated from protobuf field: int32 depth = 2;
      */
@@ -815,7 +815,7 @@ export interface GetOrderBookRequest {
     /**
      * @generated from protobuf field: string instrument_id = 3;
      */
-    instrumentId: string; // Идентификатор инструмента, принимает значение figi или instrument_uid
+    instrumentId: string; // Идентификатор инструмента, принимает значение figi или instrument_uid.
 }
 /**
  * Информация о стакане.
@@ -870,7 +870,7 @@ export interface GetOrderBookResponse {
     /**
      * @generated from protobuf field: string instrument_uid = 9;
      */
-    instrumentUid: string; // Uid инструмента
+    instrumentUid: string; // Uid инструмента.
 }
 /**
  * Запрос получения торгового статуса.
@@ -881,11 +881,11 @@ export interface GetTradingStatusRequest {
     /**
      * @generated from protobuf field: string figi = 1;
      */
-    figi: string; // Идентификатор инструмента.
+    figi: string; // Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
     /**
      * @generated from protobuf field: string instrument_id = 2;
      */
-    instrumentId: string; // Идентификатор инструмента, принимает значение figi или instrument_uid
+    instrumentId: string; // Идентификатор инструмента, принимает значение figi или instrument_uid.
 }
 /**
  * Информация о торговом статусе.
@@ -916,7 +916,7 @@ export interface GetTradingStatusResponse {
     /**
      * @generated from protobuf field: string instrument_uid = 6;
      */
-    instrumentUid: string; // Uid инструмента
+    instrumentUid: string; // Uid инструмента.
 }
 /**
  * Запрос обезличенных сделок за последний час.
@@ -927,7 +927,7 @@ export interface GetLastTradesRequest {
     /**
      * @generated from protobuf field: string figi = 1;
      */
-    figi: string; // Figi-идентификатор инструмента
+    figi: string; // Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
     /**
      * @generated from protobuf field: google.protobuf.Timestamp from = 2;
      */
@@ -939,7 +939,7 @@ export interface GetLastTradesRequest {
     /**
      * @generated from protobuf field: string instrument_id = 4;
      */
-    instrumentId: string; // Идентификатор инструмента, принимает значение figi или instrument_uid
+    instrumentId: string; // Идентификатор инструмента, принимает значение figi или instrument_uid.
 }
 /**
  * Обезличенных сделок за последний час.
@@ -950,7 +950,7 @@ export interface GetLastTradesResponse {
     /**
      * @generated from protobuf field: repeated tinkoff.public.invest.api.contract.v1.Trade trades = 1;
      */
-    trades: Trade[]; // Массив сделок
+    trades: Trade[]; // Массив сделок.
 }
 /**
  * Запрос активных подписок.
@@ -979,7 +979,7 @@ export interface InstrumentClosePriceRequest {
     /**
      * @generated from protobuf field: string instrument_id = 1;
      */
-    instrumentId: string; // Идентификатор инструмента, принимает значение figi или instrument_uid
+    instrumentId: string; // Идентификатор инструмента, принимает значение figi или instrument_uid.
 }
 /**
  * Цены закрытия торговой сессии по инструментам.

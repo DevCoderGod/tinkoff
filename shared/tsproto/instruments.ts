@@ -506,11 +506,15 @@ export interface Option {
     /**
      * @generated from protobuf field: bool weekend_flag = 407;
      */
-    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным
+    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным.
     /**
      * @generated from protobuf field: bool blocked_tca_flag = 408;
      */
-    blockedTcaFlag: boolean; // Флаг заблокированного ТКС
+    blockedTcaFlag: boolean; // Флаг заблокированного ТКС.
+    /**
+     * @generated from protobuf field: bool api_trade_available_flag = 409;
+     */
+    apiTradeAvailableFlag: boolean; // Параметр указывает на возможность торговать инструментом через API.
 }
 /**
  * Данные по акции.
@@ -715,11 +719,11 @@ export interface Bond {
     /**
      * @generated from protobuf field: bool weekend_flag = 53;
      */
-    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным
+    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным.
     /**
      * @generated from protobuf field: bool blocked_tca_flag = 54;
      */
-    blockedTcaFlag: boolean; // Флаг заблокированного ТКС
+    blockedTcaFlag: boolean; // Флаг заблокированного ТКС.
     /**
      * @generated from protobuf field: google.protobuf.Timestamp first_1min_candle_date = 61 [json_name = "first1minCandleDate"];
      */
@@ -858,11 +862,11 @@ export interface Currency {
     /**
      * @generated from protobuf field: bool weekend_flag = 53;
      */
-    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным
+    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным.
     /**
      * @generated from protobuf field: bool blocked_tca_flag = 54;
      */
-    blockedTcaFlag: boolean; // Флаг заблокированного ТКС
+    blockedTcaFlag: boolean; // Флаг заблокированного ТКС.
     /**
      * @generated from protobuf field: google.protobuf.Timestamp first_1min_candle_date = 56 [json_name = "first1minCandleDate"];
      */
@@ -1017,11 +1021,11 @@ export interface Etf {
     /**
      * @generated from protobuf field: bool weekend_flag = 43;
      */
-    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным
+    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным.
     /**
      * @generated from protobuf field: bool blocked_tca_flag = 44;
      */
-    blockedTcaFlag: boolean; // Флаг заблокированного ТКС
+    blockedTcaFlag: boolean; // Флаг заблокированного ТКС.
     /**
      * @generated from protobuf field: google.protobuf.Timestamp first_1min_candle_date = 56 [json_name = "first1minCandleDate"];
      */
@@ -1184,11 +1188,11 @@ export interface Future {
     /**
      * @generated from protobuf field: bool weekend_flag = 43;
      */
-    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным
+    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным.
     /**
      * @generated from protobuf field: bool blocked_tca_flag = 44;
      */
-    blockedTcaFlag: boolean; // Флаг заблокированного ТКС
+    blockedTcaFlag: boolean; // Флаг заблокированного ТКС.
     /**
      * @generated from protobuf field: google.protobuf.Timestamp first_1min_candle_date = 56 [json_name = "first1minCandleDate"];
      */
@@ -4108,11 +4112,12 @@ class Option$Type extends MessageType<Option> {
             { no: 405, name: "sell_available_flag", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 406, name: "for_qual_investor_flag", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 407, name: "weekend_flag", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 408, name: "blocked_tca_flag", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+            { no: 408, name: "blocked_tca_flag", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 409, name: "api_trade_available_flag", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
     create(value?: PartialMessage<Option>): Option {
-        const message = { uid: "", positionUid: "", ticker: "", classCode: "", basicAssetPositionUid: "", tradingStatus: 0, realExchange: 0, direction: 0, paymentType: 0, style: 0, settlementType: 0, name: "", currency: "", settlementCurrency: "", assetType: "", basicAsset: "", exchange: "", countryOfRisk: "", countryOfRiskName: "", sector: "", lot: 0, shortEnabledFlag: false, forIisFlag: false, otcFlag: false, buyAvailableFlag: false, sellAvailableFlag: false, forQualInvestorFlag: false, weekendFlag: false, blockedTcaFlag: false };
+        const message = { uid: "", positionUid: "", ticker: "", classCode: "", basicAssetPositionUid: "", tradingStatus: 0, realExchange: 0, direction: 0, paymentType: 0, style: 0, settlementType: 0, name: "", currency: "", settlementCurrency: "", assetType: "", basicAsset: "", exchange: "", countryOfRisk: "", countryOfRiskName: "", sector: "", lot: 0, shortEnabledFlag: false, forIisFlag: false, otcFlag: false, buyAvailableFlag: false, sellAvailableFlag: false, forQualInvestorFlag: false, weekendFlag: false, blockedTcaFlag: false, apiTradeAvailableFlag: false };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<Option>(this, message, value);
@@ -4251,6 +4256,9 @@ class Option$Type extends MessageType<Option> {
                     break;
                 case /* bool blocked_tca_flag */ 408:
                     message.blockedTcaFlag = reader.bool();
+                    break;
+                case /* bool api_trade_available_flag */ 409:
+                    message.apiTradeAvailableFlag = reader.bool();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -4393,6 +4401,9 @@ class Option$Type extends MessageType<Option> {
         /* bool blocked_tca_flag = 408; */
         if (message.blockedTcaFlag !== false)
             writer.tag(408, WireType.Varint).bool(message.blockedTcaFlag);
+        /* bool api_trade_available_flag = 409; */
+        if (message.apiTradeAvailableFlag !== false)
+            writer.tag(409, WireType.Varint).bool(message.apiTradeAvailableFlag);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
