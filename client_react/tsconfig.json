@@ -1,4 +1,9 @@
 {
+  "references": [
+	{
+		"path": "../shared"
+	}
+  ],	
   "compilerOptions": {
     "target": "es5",
     "lib": [
@@ -18,9 +23,26 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "rootDir": ".",
+	"baseUrl": ".",
+	"paths": {
+	  "@helpers/*": [
+		"./src/helpers/*"
+	  ],
+	  "@models/*": [
+		"../shared/models/*"
+	  ],
+	  "@proto/*": [
+		"../shared/tsproto/*"
+	  ],
+	  "@store": [
+		"src/Store"
+	  ]
+	},
   },
   "include": [
     "src"
-  ]
+  ],
+
 }
