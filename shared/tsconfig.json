@@ -1,5 +1,11 @@
 {
 	"compilerOptions": {
-		"composite": true
+		"target": "ES2020",
+		"moduleResolution":"Node",
+		"composite": true,
+		"declaration": true,
+    	"declarationDir": "./types",
+		"emitDeclarationOnly": true,
+		"strictNullChecks": true
 	}
 }
