@@ -4,17 +4,7 @@
   "author": "devcodergod",
   "description": "",
   "scripts": {
-	"downloadProto": "node ./shared/getProto",
-    "commonCompileProto": "npx protoc --ts_out .\\shared\\tsproto --proto_path .\\shared\\investAPI-main\\src\\docs\\contracts shared\\investAPI-main\\src\\docs\\contracts\\common.proto",
-    "instrumentsCompileProto": "npx protoc --ts_out .\\shared\\tsproto --proto_path .\\shared\\investAPI-main\\src\\docs\\contracts shared\\investAPI-main\\src\\docs\\contracts\\instruments.proto",
-    "marketdataCompileProto": "npx protoc --ts_out .\\shared\\tsproto --proto_path .\\shared\\investAPI-main\\src\\docs\\contracts shared\\investAPI-main\\src\\docs\\contracts\\marketdata.proto",
-    "operationsCompileProto": "npx protoc --ts_out .\\shared\\tsproto --proto_path .\\shared\\investAPI-main\\src\\docs\\contracts shared\\investAPI-main\\src\\docs\\contracts\\operations.proto",
-    "ordersCompileProto": "npx protoc --ts_out .\\shared\\tsproto --proto_path .\\shared\\investAPI-main\\src\\docs\\contracts shared\\investAPI-main\\src\\docs\\contracts\\orders.proto",
-    "stopordersCompileProto": "npx protoc --ts_out .\\shared\\tsproto --proto_path .\\shared\\investAPI-main\\src\\docs\\contracts shared\\investAPI-main\\src\\docs\\contracts\\stoporders.proto",
-    "usersCompileProto": "npx protoc --ts_out .\\shared\\tsproto --proto_path .\\shared\\investAPI-main\\src\\docs\\contracts shared\\investAPI-main\\src\\docs\\contracts\\users.proto",
-    "sandboxCompileProto": "npx protoc --ts_out .\\shared\\tsproto --proto_path .\\shared\\investAPI-main\\src\\docs\\contracts shared\\investAPI-main\\src\\docs\\contracts\\sandbox.proto",
-    "compileProto": "npm run commonCompileProto && npm run instrumentsCompileProto & npm run marketdataCompileProto & npm run operationsCompileProto & npm run ordersCompileProto & npm run stopordersCompileProto & npm run usersCompileProto && npm run sandboxCompileProto",
-    "getProto": "npm run downloadProto && npm run compileProto",
+    "getProto": "npm run getProto --prefix shared",
     "dev:server": "npm run start --prefix server",
     "prod:server": "npm run prod --prefix server",
     "test": "echo \"Error: no test specified\" && exit 1"
