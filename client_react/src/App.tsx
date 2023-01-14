@@ -13,7 +13,6 @@ export const App = observer(function App(){
 		if(Store.app.isTerminal){
 			return(
 				<Routes>
-					<Route path= "/terminal" element={<Terminal/>} />
 					<Route path= "/" element={<Home/>} />
 					<Route path= "/*" element={<Navigate to="/" replace />} />
 				</Routes>
@@ -23,6 +22,7 @@ export const App = observer(function App(){
 				<Routes>
 					<Route path= "/" element={<Home/>} />
 					<Route path= "/portfolio" element={<Portfolio/>} />
+					<Route path= "/terminal" element={<Terminal/>} />
 					<Route path= "/*" element={<Navigate to="/portfolio" replace />} />
 				</Routes>
 			)	
