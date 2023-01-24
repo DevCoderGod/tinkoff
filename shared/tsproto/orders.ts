@@ -119,7 +119,7 @@ export interface PostOrderRequest {
     /**
      * @generated from protobuf field: string figi = 1;
      */
-    figi: string; // Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
+    figi: string; // Figi-идентификатор инструмента.
     /**
      * @generated from protobuf field: int64 quantity = 2;
      */
@@ -379,7 +379,7 @@ export interface OrderStage {
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue price = 1;
      */
-    price?: MoneyValue; // Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
+    price?: MoneyValue; // Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента..
     /**
      * @generated from protobuf field: int64 quantity = 2;
      */

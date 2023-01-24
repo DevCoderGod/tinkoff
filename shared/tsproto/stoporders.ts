@@ -24,7 +24,7 @@ export interface PostStopOrderRequest {
     /**
      * @generated from protobuf field: string figi = 1;
      */
-    figi: string; // Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
+    figi: string; // Figi-идентификатор инструмента.
     /**
      * @generated from protobuf field: int64 quantity = 2;
      */
@@ -174,7 +174,7 @@ export interface StopOrder {
     /**
      * @generated from protobuf field: string instrument_uid = 12;
      */
-    instrumentUid: string; // instrument_uid идентификатор инструмента.
+    instrumentUid: string; // instrument_uid идентификатор инструмента
 }
 /**
  * Направление сделки стоп-заявки.

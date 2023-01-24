@@ -191,23 +191,23 @@ export interface PortfolioResponse {
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue total_amount_shares = 1;
      */
-    totalAmountShares?: MoneyValue; // Общая стоимость акций в портфеле.
+    totalAmountShares?: MoneyValue; // Общая стоимость акций в портфеле в рублях.
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue total_amount_bonds = 2;
      */
-    totalAmountBonds?: MoneyValue; // Общая стоимость облигаций в портфеле.
+    totalAmountBonds?: MoneyValue; // Общая стоимость облигаций в портфеле в рублях.
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue total_amount_etf = 3;
      */
-    totalAmountEtf?: MoneyValue; // Общая стоимость фондов в портфеле.
+    totalAmountEtf?: MoneyValue; // Общая стоимость фондов в портфеле в рублях.
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue total_amount_currencies = 4;
      */
-    totalAmountCurrencies?: MoneyValue; // Общая стоимость валют в портфеле.
+    totalAmountCurrencies?: MoneyValue; // Общая стоимость валют в портфеле в рублях.
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue total_amount_futures = 5;
      */
-    totalAmountFutures?: MoneyValue; // Общая стоимость фьючерсов в портфеле.
+    totalAmountFutures?: MoneyValue; // Общая стоимость фьючерсов в портфеле в рублях.
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.Quotation expected_yield = 6;
      */
@@ -223,19 +223,19 @@ export interface PortfolioResponse {
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue total_amount_options = 9;
      */
-    totalAmountOptions?: MoneyValue; // Общая стоимость опционов в портфеле.
+    totalAmountOptions?: MoneyValue; // Общая стоимость опционов в портфеле в рублях.
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue total_amount_sp = 10;
      */
-    totalAmountSp?: MoneyValue; // Общая стоимость структурных нот в портфеле.
+    totalAmountSp?: MoneyValue; // Общая стоимость структурных нот в портфеле в рублях
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue total_amount_portfolio = 11;
      */
-    totalAmountPortfolio?: MoneyValue; // Общая стоимость портфеля.
+    totalAmountPortfolio?: MoneyValue; // Общая стоимость портфеля в рублях
     /**
      * @generated from protobuf field: repeated tinkoff.public.invest.api.contract.v1.VirtualPortfolioPosition virtual_positions = 12;
      */
-    virtualPositions: VirtualPortfolioPosition[]; // Массив виртуальных позиций портфеля.
+    virtualPositions: VirtualPortfolioPosition[]; // Массив виртуальных позиций портфеля
 }
 /**
  * Запрос позиций портфеля по счёту.
@@ -346,7 +346,7 @@ export interface PortfolioPosition {
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue current_price = 8;
      */
-    currentPrice?: MoneyValue; // Текущая цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
+    currentPrice?: MoneyValue; // Текущая цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента..
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue average_position_price_fifo = 9;
      */
@@ -419,7 +419,7 @@ export interface VirtualPortfolioPosition {
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue current_price = 10;
      */
-    currentPrice?: MoneyValue; // Текущая цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
+    currentPrice?: MoneyValue; // Текущая цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента..
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue average_position_price_fifo = 11;
      */
