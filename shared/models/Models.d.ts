@@ -1,3 +1,7 @@
-import {IUser} from './User'
+import { IToken } from './Token'
+import { IUser } from './User'
 
-export {IUser}
+export {
+	IToken,
+	IUser
+}
