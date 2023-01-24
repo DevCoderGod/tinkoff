@@ -12,7 +12,8 @@
 		"skipLibCheck": true,
 		"strict": true,
 		"paths": {
-			"@models": ["../shared/Models"]
+			"@models": ["../shared/Models"],
+			"@proto/*": ["../shared/tsproto/*"]
 		}
 	},
 	"references": [
