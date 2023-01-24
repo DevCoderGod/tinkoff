@@ -1,8 +1,7 @@
-import {IUser, IUserLoginRequest, IUserLoginResponse} from './User'
-
-export {IUser}
+import { IToken } from './Token'
+import { IUser } from './User'
 
 export {
-	IUserLoginRequest,
-	IUserLoginResponse
+	IToken,
+	IUser
 }

@@ -156,11 +156,11 @@ export interface GetUserTariffResponse {
     /**
      * @generated from protobuf field: repeated tinkoff.public.invest.api.contract.v1.UnaryLimit unary_limits = 1;
      */
-    unaryLimits: UnaryLimit[]; // Массив лимитов пользователя по unary-запросам.
+    unaryLimits: UnaryLimit[]; // Массив лимитов пользователя по unary-запросам
     /**
      * @generated from protobuf field: repeated tinkoff.public.invest.api.contract.v1.StreamLimit stream_limits = 2;
      */
-    streamLimits: StreamLimit[]; // Массив лимитов пользователей для stream-соединений.
+    streamLimits: StreamLimit[]; // Массив лимитов пользователей для stream-соединений
 }
 /**
  * Лимит unary-методов.
@@ -171,11 +171,11 @@ export interface UnaryLimit {
     /**
      * @generated from protobuf field: int32 limit_per_minute = 1;
      */
-    limitPerMinute: number; // Количество unary-запросов в минуту.
+    limitPerMinute: number; // Количество unary-запросов в минуту
     /**
      * @generated from protobuf field: repeated string methods = 2;
      */
-    methods: string[]; // Названия методов.
+    methods: string[]; // Названия методов
 }
 /**
  * Лимит stream-соединений.
@@ -186,11 +186,11 @@ export interface StreamLimit {
     /**
      * @generated from protobuf field: int32 limit = 1;
      */
-    limit: number; // Максимальное количество stream-соединений.
+    limit: number; // Максимальное количество stream-соединений
     /**
      * @generated from protobuf field: repeated string streams = 2;
      */
-    streams: string[]; // Названия stream-методов.
+    streams: string[]; // Названия stream-методов
 }
 /**
  * Запрос информации о пользователе.

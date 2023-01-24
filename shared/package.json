@@ -7,20 +7,17 @@
   "scripts": {
 	"downloadProto": "node ./getProto",
 	"deleteProto": "node ./deleteProto",
-	"commonCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-main\\src\\docs\\contracts investAPI-main\\src\\docs\\contracts\\common.proto",
-    "instrumentsCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-main\\src\\docs\\contracts investAPI-main\\src\\docs\\contracts\\instruments.proto",
-    "marketdataCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-main\\src\\docs\\contracts investAPI-main\\src\\docs\\contracts\\marketdata.proto",
-    "operationsCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-main\\src\\docs\\contracts investAPI-main\\src\\docs\\contracts\\operations.proto",
-    "ordersCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-main\\src\\docs\\contracts investAPI-main\\src\\docs\\contracts\\orders.proto",
-    "stopordersCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-main\\src\\docs\\contracts investAPI-main\\src\\docs\\contracts\\stoporders.proto",
-    "usersCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-main\\src\\docs\\contracts investAPI-main\\src\\docs\\contracts\\users.proto",
-    "sandboxCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-main\\src\\docs\\contracts investAPI-main\\src\\docs\\contracts\\sandbox.proto",
+	"commonCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-1.1\\src\\docs\\contracts investAPI-1.1\\src\\docs\\contracts\\common.proto",
+    "instrumentsCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-1.1\\src\\docs\\contracts investAPI-1.1\\src\\docs\\contracts\\instruments.proto",
+    "marketdataCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-1.1\\src\\docs\\contracts investAPI-1.1\\src\\docs\\contracts\\marketdata.proto",
+    "operationsCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-1.1\\src\\docs\\contracts investAPI-1.1\\src\\docs\\contracts\\operations.proto",
+    "ordersCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-1.1\\src\\docs\\contracts investAPI-1.1\\src\\docs\\contracts\\orders.proto",
+    "stopordersCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-1.1\\src\\docs\\contracts investAPI-1.1\\src\\docs\\contracts\\stoporders.proto",
+    "usersCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-1.1\\src\\docs\\contracts investAPI-1.1\\src\\docs\\contracts\\users.proto",
+    "sandboxCompileProto": "npx protoc --ts_out .\\tsproto --proto_path .\\investAPI-1.1\\src\\docs\\contracts investAPI-1.1\\src\\docs\\contracts\\sandbox.proto",
 	"compileProto": "npm run commonCompileProto && npm run instrumentsCompileProto & npm run marketdataCompileProto & npm run operationsCompileProto & npm run ordersCompileProto & npm run stopordersCompileProto & npm run usersCompileProto && npm run sandboxCompileProto",
     "tsc": "tsc",
     "getProto": "npm run deleteProto && npm run downloadProto && npm run compileProto && npm run tsc"
   },
-  "license": "ISC",
-  "devDependencies": {
-    "typescript": "^4.8.4"
-  }
+  "license": "ISC"
 }

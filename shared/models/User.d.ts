@@ -1,17 +1,10 @@
-export interface IUser{
-	name: string
-	id: string
-	email: string
-	jwtToken: string
-}
+import { IToken } from "./Token"
 
-export interface IUserLoginRequest{
+export interface IUser{
+	id: string
 	name: string
 	pass: string
-}
-
-export interface IUserLoginResponse{
-	id: string
 	email: string
-	jwtToken: string
+	isActivated: boolean
+	jwtToken?: IToken
 }

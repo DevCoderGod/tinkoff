@@ -719,11 +719,11 @@ export interface Bond {
     /**
      * @generated from protobuf field: bool weekend_flag = 53;
      */
-    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным.
+    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным
     /**
      * @generated from protobuf field: bool blocked_tca_flag = 54;
      */
-    blockedTcaFlag: boolean; // Флаг заблокированного ТКС.
+    blockedTcaFlag: boolean; // Флаг заблокированного ТКС
     /**
      * @generated from protobuf field: google.protobuf.Timestamp first_1min_candle_date = 61 [json_name = "first1minCandleDate"];
      */
@@ -862,11 +862,11 @@ export interface Currency {
     /**
      * @generated from protobuf field: bool weekend_flag = 53;
      */
-    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным.
+    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным
     /**
      * @generated from protobuf field: bool blocked_tca_flag = 54;
      */
-    blockedTcaFlag: boolean; // Флаг заблокированного ТКС.
+    blockedTcaFlag: boolean; // Флаг заблокированного ТКС
     /**
      * @generated from protobuf field: google.protobuf.Timestamp first_1min_candle_date = 56 [json_name = "first1minCandleDate"];
      */
@@ -1021,11 +1021,11 @@ export interface Etf {
     /**
      * @generated from protobuf field: bool weekend_flag = 43;
      */
-    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным.
+    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным
     /**
      * @generated from protobuf field: bool blocked_tca_flag = 44;
      */
-    blockedTcaFlag: boolean; // Флаг заблокированного ТКС.
+    blockedTcaFlag: boolean; // Флаг заблокированного ТКС
     /**
      * @generated from protobuf field: google.protobuf.Timestamp first_1min_candle_date = 56 [json_name = "first1minCandleDate"];
      */
@@ -1188,11 +1188,11 @@ export interface Future {
     /**
      * @generated from protobuf field: bool weekend_flag = 43;
      */
-    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным.
+    weekendFlag: boolean; // Флаг отображающий доступность торговли инструментом по выходным
     /**
      * @generated from protobuf field: bool blocked_tca_flag = 44;
      */
-    blockedTcaFlag: boolean; // Флаг заблокированного ТКС.
+    blockedTcaFlag: boolean; // Флаг заблокированного ТКС
     /**
      * @generated from protobuf field: google.protobuf.Timestamp first_1min_candle_date = 56 [json_name = "first1minCandleDate"];
      */
