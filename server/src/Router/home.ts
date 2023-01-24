@@ -1,19 +1,18 @@
 import { Router } from 'express'
-import { Api } from "../api/Api.js"
+import { Api } from "../tApi/Api.js"
 import * as VARS from '../globalVars.js'
 
-const router = Router()
+export const home = Router()
 
-router.get('/', (request, response) => {
+home.get('/', (request, response) => {
 	if(VARS.isPROD) response.render('index.js')
 	response.send('Hello world!')
 })
 
-router.get('/u', (req, response) => 
+home.get('/u', (req, response) =>  //временный урл для проверки grpc
 	Api.user.GetAccounts(null,(err:any,res:any)=>{
 		if(err) throw new Error("err")
+		console.log('res === ',res)
 		response.send(res)
 	}
 ))
-
-export default router

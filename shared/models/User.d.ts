@@ -1,4 +1,10 @@
+import { IToken } from "./Token"
+
 export interface IUser{
-	email: string
+	id: string
 	name: string
+	pass: string
+	email: string
+	isActivated: boolean
+	jwtToken?: IToken
 }

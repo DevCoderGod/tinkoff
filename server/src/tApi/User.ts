@@ -1,7 +1,7 @@
 import grpc from "@grpc/grpc-js"
 import protoLoader from "@grpc/proto-loader"
 
-const PROTO_PATH = "../shared/investAPI-main/src/docs/contracts/users.proto"
+const PROTO_PATH = "../shared/investAPI-1.1/src/docs/contracts/users.proto"
 const packageDefinition = protoLoader.loadSync(
 	PROTO_PATH,
 	{
