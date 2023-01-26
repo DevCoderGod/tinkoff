@@ -5,6 +5,8 @@ export interface IUser{
 	name: string
 	pass: string
 	email: string
-	isActivated: boolean
-	jwtToken?: IToken
+	role: "admin" | "user" |"guest"
+	isActiv: boolean
+	activExp: Date | null
+	jwtTokens: IToken[]
 }

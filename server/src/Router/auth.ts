@@ -1,19 +1,37 @@
+import { IUser } from '@models'
 import { Router } from 'express'
+import { TokenService } from '../Services/TokenServices.js'
+import { UserService } from '../Services/UserServices.js'
 
 export const auth = Router()
 
 auth.post('/registration', async (request, response) => {
 	try {
-		response.send("registration")
-		console.log("registration")
+		const {name, email, pass} = request.body
+		const user:IUser | null = await UserService.new({name, email, pass})
+		if(user){
+			const {id,name, email, role, isActiv} = user
+			response.send({id,name, email, role, isActiv})
+			console.log("registration success")
+		}
+		else response.send("registration failed")
 	} catch (err) {
+		console.log("registration failed: Server error: ",err)
 		response.status(500).json({message: ` Ошибка: ${err} `})
 	}
 })
+
 auth.post('/login', async (request, response) => {
+
+	const {name, email, pass} = request.body
 	try {
-		response.send("login")
-		console.log("login")
+		const user:IUser | null = await UserService.login({name, pass})
+		if(user){
+			const {name, email, role, isActiv} = user
+			response.send({name, email, role, isActiv})
+			console.log("login success")
+		}
+		else response.send("login failed")
 	} catch (err) {
 		response.status(500).json({message: ` Ошибка: ${err} `})
 	}

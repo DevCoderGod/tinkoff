@@ -1,4 +1,7 @@
 export interface IToken{
-	aToken: string
-	rToken: string
+	id: string
+	userID: string
+	value: string
+	type: "access" | "refresh"
+	expired: string
 }
