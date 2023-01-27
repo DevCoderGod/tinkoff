@@ -1,7 +1,7 @@
-import { metods } from "./metods/metods.js"
-import { models } from "./models/models.js"
+import { Token } from "./Tokens.js"
+import { User } from "./User.js"
 
 export const mongo = {
-	// ...models,
-	...metods
+	Token,
+	User
 }

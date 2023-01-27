@@ -9,4 +9,8 @@ export interface IUser{
 	isActiv: boolean
 	activExp: Date | null
 	jwtTokens: IToken[]
+	info?: {
+		deviceIDs: string[]
+		[key:string]:any
+	}
 }

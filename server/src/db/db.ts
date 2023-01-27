@@ -1,35 +1,35 @@
 import { IToken, IUser } from "@models"
-import { mongo as db } from "./mongo/mongo.js"
+import { mongo as orm } from "./mongo/mongo.js"
 
-export const IDB = {
+export const db = {
 	User:{
-		find: async (key:{[key in Pick<IUser, "name" | "email"> as string]:string}):Promise<IUser | null> =>
-			await db.User.find(key).then(data => {
-				if(!data)return null
-				const id = data._id.toString()
-				const {name, pass, email, role, isActiv, activExp, jwtTokens} = data // TODO не универсально..
-				return {id, name, pass, email, role, isActiv, activExp, jwtTokens}
-			}),
+		find: async (key:{[key in Pick<IUser, "id" | "name" | "email"> as string]:string}):Promise<IUser | null> =>
+			await orm.User.find(key),
 
-		new: async (candidate:Pick<IUser, "name" | "pass" | "email">):Promise<IUser> =>
-			await db.User.new(candidate).then(data => {
-				const id = data._id.toString()
-				const {name, pass, email, role, isActiv, activExp, jwtTokens} = data // TODO не универсально..
-				return {id, name, pass, email, role, isActiv, activExp, jwtTokens}
-			}),
+		create: async (candidate:Pick<IUser, "name" | "pass" | "email">):Promise<IUser> =>
+			await orm.User.create(candidate),
 
-		saveTokens:async (id:string, tokens:string[]):Promise<boolean> =>
-			await db.User.saveTokens(id, tokens),
+		addTokens: async (id:string, tokens:string[]):Promise<boolean> =>
+			await orm.User.addTokens(id, tokens),
+
+		updateTokens: async (id:string, tokens:string[]):Promise<boolean> =>
+			await orm.User.updateTokens(id, tokens),
+
+		getTokens:async (id:string):Promise<IToken[] | null> => 
+			await orm.User.getTokens(id),
 	},
 
 	Token:{
-		new:  async (token:Omit<IToken, "id">):Promise<IToken> =>
-			await db.Token.new(token).then(data => {
-				const id = data._id.toString()
-				const {userID, value, type, expired} = data
-				return {id, userID, value, type, expired}
-			}),
+		find: async (key:{[key in Pick<IToken, "value"> as string]:string}):Promise<IToken | null> =>
+			await orm.Token.find(key),
 
-		// save: async (tokens:IToken[]):Promise<boolean> => await db.Token.save(tokens).then(() => true).catch(() => false),
+		create:  async (data:Omit<IToken, "id">):Promise<IToken> =>
+			await orm.Token.create(data),
+
+		delete :async (tokenString:string):Promise<boolean> =>
+			await orm.Token.delete(tokenString),
+
+		// save: async (tokens:IToken[]):Promise<boolean> =>
+			// await orm.Token.save(tokens),
 	},
 }
