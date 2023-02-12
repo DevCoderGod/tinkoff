@@ -15,7 +15,7 @@ export const UserService = {
 		})
 	},
 
-	login: async (candidate:Pick<IUser, "name" | "pass" >, tokenData:Pick<IToken, "deviceID" >):Promise<IUser | null> => {
+	login: async (candidate:Pick<IUser, "name" | "pass">, tokenData:Pick<IToken, "deviceID">):Promise<IUser | null> => {
 		let user:IUser | null = await db.User.find({name:candidate.name})
 		if(!user) return null
 		if(await bcrypt.compare(candidate.pass,user.pass)){

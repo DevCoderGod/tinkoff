@@ -34,7 +34,7 @@ export const TokenService = {
 		return await db.Token.find({value: tokenString})
 	},
 
-	check: async (idToken:string, tokens:IToken[]):Promise<boolean> => {
+	check: async (idToken:string):Promise<boolean> => { // TODO 
 		return false
 	},
 }

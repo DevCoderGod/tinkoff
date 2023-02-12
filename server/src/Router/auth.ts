@@ -1,14 +1,14 @@
 import { IUser } from '@models'
 import { Router } from 'express'
-import { IPayload } from 'src/Services/TokenServices.js'
+import { AuthRequestBodyParserAndCheck } from '../helpers/AuthRequestBodyParserAndCheck.js'
+import { AuthRequestCookiesParserAndCheck } from '../helpers/AuthRequestCookiesParserAndCheck.js'
 import { UserService } from '../Services/UserServices.js'
 
 export const auth = Router()
 
 auth.post('/registration', async (request, response) => {
 	try {
-		const {name, email, pass} = request.body
-		if(!name || !email || !pass) throw new Error(" data is undefined ") //TODO сделать парсер
+		const {name, email, pass} = AuthRequestBodyParserAndCheck(request.body,["name", "email", "pass"])
 
 		const user:IUser | null = await UserService.create({name, email, pass})
 		if(user){
@@ -21,18 +21,15 @@ auth.post('/registration', async (request, response) => {
 
 auth.post('/login', async (request, response) => {
 	try {
-		const {rToken} = request.cookies
-		if(rToken){
-			// const userData:IPayload = await UserService.checkRToken(rToken)
-			throw new Error(' Login already done ')
-		}
-		const {name, pass, deviceID} = request.body
-		if(!name || !pass || !deviceID) throw new Error(' data is undefined ')
+		const {rToken} = AuthRequestCookiesParserAndCheck(request.cookies,["rToken"])
+		if(rToken) throw new Error(' Login already done ') // TODO redirect to ?
+
+		const {name, pass, deviceID} = AuthRequestBodyParserAndCheck(request.body,["name", "pass", "deviceID"])
 
 		const user:IUser | null = await UserService.login({name, pass}, {deviceID})
 		if(user){
 			const {name, email, role, isActiv, jwtTokens} = user
-			response.cookie("rToken", jwtTokens[0].value, {maxAge: 30*24*60*60*1000, httpOnly: true}) // TODO jwtTokens[0]
+			response.cookie("rToken", jwtTokens[0].value, {maxAge: 30*24*60*60*1000, httpOnly: true}) // TODO jwtTokens[0] => by deviceID
 			response.send({name, email, role, isActiv})
 		}
 		else response.send("User is not found")
@@ -43,8 +40,8 @@ auth.post('/login', async (request, response) => {
 
 auth.post('/logout', async (request, response) => {
 	try {
-		const {rToken} = request.cookies
-		if(!rToken) throw new Error(' data is undefined ')
+		const {rToken} = AuthRequestCookiesParserAndCheck(request.cookies,["rToken"])
+		if(!rToken) throw new Error(' logout: rToken is undefined ')
 
 		if(!await UserService.logout(rToken)) throw new Error(' Logout failed ')
 		response.clearCookie('rToken')
@@ -56,13 +53,8 @@ auth.post('/logout', async (request, response) => {
 
 auth.post('/refresh', async (request, response) => {
 	try {
-		const {rToken} = request.cookies
-		if(!rToken) throw new Error(' rToken is undefined ')
-
-		if(!rToken){
-			response.redirect("/login")// TODO redirect to login
-			return
-		}
+		const {rToken} = AuthRequestCookiesParserAndCheck(request.cookies,["rToken"])
+		if(!rToken) throw new Error(' refresh: rToken is undefined ')// TODO redirect to login
 
 		const aToken = await UserService.refreshTocken(rToken)
 		if(aToken){
