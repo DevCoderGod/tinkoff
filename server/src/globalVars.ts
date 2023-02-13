@@ -4,5 +4,5 @@ export const isDEV = process.env.NODE_ENV === 'dev'
 export const DB_URL = 'mongodb://127.0.0.1:27017/auth'
 export const aTokenSecret = 'aTokenSecret'
 export const rTokenSecret = 'rTokenSecret'
-export const aTokenExpired = '1h'
-export const rTokenExpired = '30d'
+export const aTokenExpired = 'PT5M' //ISO 8601 5 minutes
+export const rTokenExpired = 'P5D' //ISO 8601 5 days

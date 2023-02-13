@@ -1,21 +1,31 @@
-import jwt, { JwtPayload } from "jsonwebtoken"
-import * as VARS from '../globalVars.js'
 import { IToken, IUser } from '@models'
 import { db } from "../db/db.js"
+import * as VARS from '../globalVars.js'
+import jwt, { JwtPayload } from "jsonwebtoken"
+import { DateTime, Duration } from 'luxon'
 
-export interface IPayload extends Pick<IUser, "name" | "role" | "isActiv">{
+export interface IPayload extends Pick<JwtPayload, "exp">, Pick<IUser, "name" | "role" | "isActiv">{
 	deviceID: string
 }
 
 export const TokenService = {
 	
 	generateAToken: async (payload: IPayload):Promise<string> => {
-		return jwt.sign(payload, VARS.aTokenSecret, {expiresIn: VARS.aTokenExpired})
+		// console.log('expiration === ',DateTime.now().plus(Duration.fromISO(VARS.aTokenExpired)).toISO())
+		return jwt.sign(payload, VARS.aTokenSecret, {expiresIn: DateTime.now().plus(Duration.fromISO(VARS.aTokenExpired)).toSeconds()})
 	},
 
 	generateRToken: async (userID:string, payload: IPayload):Promise<IToken> => {
-		const Token = jwt.sign(payload, VARS.rTokenSecret, {expiresIn: VARS.rTokenExpired})
-		return await db.Token.create({userID, deviceID:payload.deviceID, value:Token, type: "refresh", expired:VARS.rTokenExpired})
+		const exp = DateTime.now().plus(Duration.fromISO(VARS.rTokenExpired))
+		payload.exp = exp.toSeconds()
+
+		return await db.Token.create({
+			userID,
+			deviceID: payload.deviceID,
+			value:jwt.sign(payload, VARS.rTokenSecret),
+			type: "refresh",
+			expiration:exp.toISO()
+		})
 	},
 
 	decodeAToken: (tokenString:string):IPayload => {

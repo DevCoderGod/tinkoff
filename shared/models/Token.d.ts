@@ -4,5 +4,5 @@ export interface IToken{
 	deviceID: string
 	value: string
 	type: "access" | "refresh"
-	expired: string
+	expiration: string //ISO 8601
 }

@@ -6,7 +6,7 @@ const TokenModel = model<IToken>("Token", new Schema<IToken>({
 	deviceID: { type: String, required: true },
 	value: { type: String, required: true },
 	type: { type: String, required: true },
-	expired: { type: String, required: true }
+	expiration: { type: String, required: true }
 }))
 
 export const Token = {
@@ -15,29 +15,12 @@ export const Token = {
 		return await TokenModel.create(data)
 			.then(data => {
 				const id = data._id.toString()
-				const {userID, deviceID, value, type, expired} = data
-				return {id, userID, deviceID, value, type, expired}
+				const {userID, deviceID, value, type, expiration} = data
+				return {id, userID, deviceID, value, type, expiration}
 			})
 			.catch(err => {
 				console.log(" Token.create is fail: ",err)
 				throw new Error("Token.create is fail: ")
-			})
-	},
-
-	// save: async function (tokens:IToken[]){
-	// 	await TokenModel.insertMany(tokens)
-	// 		.then(() => true)
-	// 		.catch(err => {
-	// 			console.log(" Token.save is fail: ",err)
-	// 			throw new Error("Token.save is fail: ")
-	// 		})
-	// },
-
-	findByUserId: async function (userID:string){
-		return await TokenModel.find({userID})
-			.catch(err => {
-				console.log(" Token.findByUserId is fail: ",err)
-				throw new Error("Token.findByUserId is fail: ")
 			})
 	},
 
@@ -47,8 +30,8 @@ export const Token = {
 			.then(token => {
 				if(!token)return null
 				const id = token._id.toString()
-				const {userID, deviceID, value, type, expired} = token // TODO не универсально..
-				return {id, userID, deviceID, value, type, expired}
+				const {userID, deviceID, value, type, expiration} = token // TODO не универсально..
+				return {id, userID, deviceID, value, type, expiration}
 			})
 			.catch((err) =>{
 				console.log(" Token.findOne is fail: ",err)
