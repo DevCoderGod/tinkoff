@@ -3,6 +3,8 @@ import { Router } from 'express'
 import { AuthRequestBodyParserAndCheck } from '../helpers/AuthRequestBodyParserAndCheck.js'
 import { AuthRequestCookiesParserAndCheck } from '../helpers/AuthRequestCookiesParserAndCheck.js'
 import { UserService } from '../Services/UserServices.js'
+import { TokenService } from '../Services/TokenServices.js'
+import { DateTime, Duration, Interval } from 'luxon'
 
 export const auth = Router()
 
@@ -22,14 +24,19 @@ auth.post('/registration', async (request, response) => {
 auth.post('/login', async (request, response) => {
 	try {
 		const {rToken} = AuthRequestCookiesParserAndCheck(request.cookies,["rToken"])
-		if(rToken) throw new Error(' Login already done ') // TODO redirect to ?
+		if(rToken){
+			if(await TokenService.find(rToken)) throw new Error(' Login already done ') // TODO redirect to ?
+		}
 
 		const {name, pass, deviceID} = AuthRequestBodyParserAndCheck(request.body,["name", "pass", "deviceID"])
 
 		const user:IUser | null = await UserService.login({name, pass}, {deviceID})
 		if(user){
 			const {name, email, role, isActiv, jwtTokens} = user
-			response.cookie("rToken", jwtTokens[0].value, {maxAge: 30*24*60*60*1000, httpOnly: true}) // TODO jwtTokens[0] => by deviceID
+			const rToken = jwtTokens.find(token => token.deviceID === deviceID)
+			if(!rToken) throw new Error(' UserService.login is failed ')
+			const ms = Interval.fromDateTimes(DateTime.now(), DateTime.fromISO(rToken.expiration)).toDuration().toMillis()
+			response.cookie("rToken", rToken.value, {maxAge: ms, httpOnly: true})
 			response.send({name, email, role, isActiv})
 		}
 		else response.send("User is not found")
@@ -56,10 +63,10 @@ auth.post('/refresh', async (request, response) => {
 		const {rToken} = AuthRequestCookiesParserAndCheck(request.cookies,["rToken"])
 		if(!rToken) throw new Error(' refresh: rToken is undefined ')// TODO redirect to login
 
-		const aToken = await UserService.refreshTocken(rToken)
-		if(aToken){
-			response.cookie("rToken", rToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
-			response.send(aToken)
+		const aTokenString = await UserService.refreshAToken(rToken)
+		if(aTokenString){
+			response.cookie("rToken", rToken, {maxAge: 30*24*60*60*1000, httpOnly: true}) // TODO to body
+			response.send(aTokenString)
 		}
 	} catch (err) {
 		response.status(500).json({message: ` ${err} `})

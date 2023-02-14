@@ -6,14 +6,17 @@ export function AuthRequestCookiesParserAndCheck(cookies:TAuthRequestCookies, te
 	const result:TAuthRequestCookies = {} as TAuthRequestCookies
 	
 	for (let index = 0; index < template.length; index++) {
-		const key = template[index];
+		const key = template[index]
 
 		if(key === "rToken") {
 			if(cookies[key]){
 				// TokenService.check(cookies[key]) // TODO
 				result[key] = cookies[key]
 				continue
-			} else continue
+			} else{
+				result[key] = ""
+				continue
+			}
 		}
 
 		if(cookies[key]) {

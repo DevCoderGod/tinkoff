@@ -30,7 +30,7 @@ export const UserService = {
 		const rToken:IToken | null = await TokenService.find(rTokenString)
 		if(!rToken) return false
 		const user:IUser | null = await db.User.find({id:rToken.userID})
-		if(user && await UserService.deleteTocken(user, rToken) && await TokenService.delete(rTokenString)) return true
+		if(user && await UserService.deleteToken(user, rToken) && await TokenService.delete(rTokenString)) return true
 		return false
 	},
 
@@ -53,7 +53,7 @@ export const UserService = {
 		return await TokenService.generateAToken(payload)
 	},
 
-	deleteTocken: async (user:IUser, rToken:IToken):Promise<boolean> => {
+	deleteToken: async (user:IUser, rToken:IToken):Promise<boolean> => {
 		let tokens:string[] = []
 		user.jwtTokens.forEach(token => {
 			if(token.value !== rToken.value) tokens.push(token.id)
@@ -61,7 +61,7 @@ export const UserService = {
 		return await db.User.updateTokens(user.id, tokens)
 	},
 
-	refreshTocken: async (rTokenString:string):Promise<string> => {
+	refreshAToken: async (rTokenString:string):Promise<string> => {
 		const userData:IPayload = TokenService.decodeRToken(rTokenString)
 		let user:IUser | null = await db.User.find({name:userData.name})
 		if(!user) throw new Error(' refreshTocken is failed ')
