@@ -10,7 +10,6 @@ export function AuthRequestCookiesParserAndCheck(cookies:TAuthRequestCookies, te
 
 		if(key === "rToken") {
 			if(cookies[key]){
-				// TokenService.check(cookies[key]) // TODO
 				result[key] = cookies[key]
 				continue
 			} else{

@@ -15,7 +15,7 @@ export const db = {
 		updateTokens: async (id:string, tokens:string[]):Promise<boolean> =>
 			await orm.User.updateTokens(id, tokens),
 
-		getTokens:async (id:string):Promise<IToken[] | null> => 
+		getTokens:async (id:string):Promise<IToken[] | null> =>
 			await orm.User.getTokens(id),
 	},
 

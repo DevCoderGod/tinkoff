@@ -12,7 +12,10 @@ export const TokenService = {
 	
 	generateAToken: async (payload: IPayload):Promise<string> => {
 		// console.log('expiration === ',DateTime.now().plus(Duration.fromISO(VARS.aTokenExpired)).toISO())
-		return jwt.sign(payload, VARS.aTokenSecret, {expiresIn: DateTime.now().plus(Duration.fromISO(VARS.aTokenExpired)).toSeconds()})
+		const exp = DateTime.now().plus(Duration.fromISO(VARS.aTokenExpired))
+		payload.exp = exp.toSeconds()
+
+		return jwt.sign(payload, VARS.aTokenSecret)
 	},
 
 	generateRToken: async (userID:string, payload: IPayload):Promise<IToken> => {
@@ -28,12 +31,18 @@ export const TokenService = {
 		})
 	},
 
-	decodeAToken: (tokenString:string):IPayload => {
+	verifyAToken: (tokenString:string):IPayload => {
 		return jwt.verify(tokenString, VARS.aTokenSecret,{ complete: true }).payload as IPayload
 	},
 
-	decodeRToken: (tokenString:string): IPayload => {
-		return jwt.verify(tokenString, VARS.rTokenSecret,{ complete: true }).payload as IPayload
+	verifyRToken: (tokenString:string): IPayload | false => {
+		try {
+			return jwt.verify(tokenString, VARS.rTokenSecret,{ complete: true }).payload as IPayload
+		} catch (err:any) {
+			console.log(' verifyRToken is err: ',err.message)
+			return false
+		}
+
 	},
 
 	delete: async (tokenString:string):Promise<boolean> => {
@@ -42,9 +51,5 @@ export const TokenService = {
 
 	find: async (tokenString:string):Promise<IToken | null> => {
 		return await db.Token.find({value: tokenString})
-	},
-
-	check: async (idToken:string):Promise<boolean> => { // TODO 
-		return false
 	},
 }

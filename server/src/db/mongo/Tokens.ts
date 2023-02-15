@@ -13,8 +13,8 @@ export const Token = {
 
 	create: async function (data:Omit<IToken, "id">){
 		return await TokenModel.create(data)
-			.then(data => {
-				const id = data._id.toString()
+			.then(token => {
+				const id = token._id.toString()
 				const {userID, deviceID, value, type, expiration} = data
 				return {id, userID, deviceID, value, type, expiration}
 			})

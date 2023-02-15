@@ -19,7 +19,8 @@ export const UserService = {
 		let user:IUser | null = await db.User.find({name:candidate.name})
 		if(!user) return null
 		if(await bcrypt.compare(candidate.pass,user.pass)){
-			// db.User.getTokens(user.id)
+			const rToken = user.jwtTokens.find(token => token.deviceID === tokenData.deviceID)
+			if(rToken)UserService.deleteToken(user, rToken)
 			await UserService.generateRToken(user, tokenData.deviceID)
 			return await db.User.find({id: user.id})
 		}
@@ -43,10 +44,6 @@ export const UserService = {
 		else throw new Error(' generateRToken is failed ')
 	},
 
-	checkRToken: async (rTokenString:string):Promise<IPayload> => {
-		return TokenService.decodeRToken(rTokenString)
-	},
-
 	generateAToken: async (user:IUser, deviceID:string):Promise<string> => {
 		const {name, role, isActiv} = user
 		const payload:IPayload = {name, deviceID, role, isActiv}
@@ -58,11 +55,12 @@ export const UserService = {
 		user.jwtTokens.forEach(token => {
 			if(token.value !== rToken.value) tokens.push(token.id)
 		})
-		return await db.User.updateTokens(user.id, tokens)
+		return await db.User.updateTokens(user.id, tokens) && await TokenService.delete(rToken.value)
 	},
 
 	refreshAToken: async (rTokenString:string):Promise<string> => {
-		const userData:IPayload = TokenService.decodeRToken(rTokenString)
+		const userData:IPayload | false = TokenService.verifyRToken(rTokenString)
+		if(!userData) return ""
 		let user:IUser | null = await db.User.find({name:userData.name})
 		if(!user) throw new Error(' refreshTocken is failed ')
 		return await UserService.generateAToken(user, userData.deviceID)

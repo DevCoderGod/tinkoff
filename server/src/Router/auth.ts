@@ -25,7 +25,7 @@ auth.post('/login', async (request, response) => {
 	try {
 		const {rToken} = AuthRequestCookiesParserAndCheck(request.cookies,["rToken"])
 		if(rToken){
-			if(await TokenService.find(rToken)) throw new Error(' Login already done ') // TODO redirect to ?
+			if(await TokenService.find(rToken)) throw new Error(' Login already done ')
 		}
 
 		const {name, pass, deviceID} = AuthRequestBodyParserAndCheck(request.body,["name", "pass", "deviceID"])
@@ -61,22 +61,28 @@ auth.post('/logout', async (request, response) => {
 auth.post('/refresh', async (request, response) => {
 	try {
 		const {rToken} = AuthRequestCookiesParserAndCheck(request.cookies,["rToken"])
-		if(!rToken) throw new Error(' refresh: rToken is undefined ')// TODO redirect to login
-
-		const aTokenString = await UserService.refreshAToken(rToken)
-		if(aTokenString){
-			response.cookie("rToken", rToken, {maxAge: 30*24*60*60*1000, httpOnly: true}) // TODO to body
-			response.send(aTokenString)
+		if(!rToken) throw new Error(' refresh: rToken is undefined ')
+		if(TokenService.verifyRToken(rToken)){
+			const aTokenString = await UserService.refreshAToken(rToken)
+			if(aTokenString){
+				response.send(aTokenString)
+			}
+		} else {
+			response.status(401).send()
 		}
 	} catch (err) {
 		response.status(500).json({message: ` ${err} `})
 	}
 })
 
-auth.get('/activate/:link', async (request, response) => {
+auth.get('/test', async (request, response) => {
 	try {
-		response.send('activate/:link')
-		console.log(' activate/:link ')
+		const {rToken} = AuthRequestCookiesParserAndCheck(request.cookies,["rToken"])
+		if(!rToken) throw new Error(' test: token is undefined. ')
+		const userData = await TokenService.verifyRToken(rToken)
+		if(!userData) throw new Error(' test: token is invalid. ')
+		response.send('test auth')
+		console.log(' test auth ')
 	} catch (err) {
 		response.status(500).json({message: ` ${err} `})
 	}
