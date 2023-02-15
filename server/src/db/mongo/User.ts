@@ -1,5 +1,5 @@
 import { IUser } from "@models"
-import { Schema, model} from "mongoose"
+import { Schema, model, ObjectId, LeanDocument, Types} from "mongoose"
 
 const UserModel = model<IUser>("User", new Schema<IUser>({
 	name: { type: String, required: true },
@@ -11,18 +11,47 @@ const UserModel = model<IUser>("User", new Schema<IUser>({
 	jwtTokens: [{ type: Schema.Types.ObjectId, ref: "Token" }]
 }))
 
+type R = {[key:string]:any} & {id:string}
+
+type DB<R> = Omit<R, "id"> & {_id: Types.ObjectId}
+
+function change<T>(doc:DB<T>):R {
+	const res:R = {} as R
+
+	const arr:(keyof DB<T>)[] = Object.keys(doc) as (keyof DB<T>)[]
+
+	arr.forEach((key) => {
+		if(key === "_id") res.id = doc._id.toString()
+		else if(key === "__v") {}
+		else {
+			const val = doc[key]
+			if(val && typeof val === "object") console.log('val === ',val) //TODO рекурсиво перебрать массивы и объекты
+			Object.defineProperty(res, key, {value: val, writable: true, enumerable: true, configurable: true})
+		}
+	})
+	return res
+}
+
 export const User = {
 	
-	find: async function (key:{[key in Pick<IUser, "id" | "name" | "email"> as string]:string}){
+	find: async function (key:{[key in Pick<IUser, "id" | "name" | "email"> as string]:string}):Promise<IUser | null>{
 		const dbKey = Object.keys(key)[0] === "id" ? {_id: key.id} : {...key} // замена "id" на "_id" в "key"
 		
 		return await UserModel.findOne(dbKey)
 			.populate("jwtTokens")
+			.lean()
 			.then(user => {
 				if(!user)return null
-				const id = user._id.toString()
-				const {name, pass, email, role, isActiv, activExp, jwtTokens} = user // TODO не универсально..
-				return {id, name, pass, email, role, isActiv, activExp, jwtTokens} //: jwtTokens.map(token => token.id.toString())
+				return change(user) as IUser
+			})
+			.then(user => {
+				// if(!user)return null
+				// console.log('user === ',user)
+				// const id = user._id.toString()
+				// const {name, pass, email, role, isActiv, activExp, jwtTokens} = user // TODO не универсально..
+				// return {id, name, pass, email, role, isActiv, activExp, jwtTokens} //: jwtTokens.map(token => token.id.toString())
+				console.log('...user === ',{...user})
+				return user
 			})
 			.catch(err => {
 				console.log(" User.findOne is fail: ",err)

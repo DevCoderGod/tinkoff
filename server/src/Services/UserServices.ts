@@ -40,7 +40,10 @@ export const UserService = {
 		const payload:IPayload = {name, deviceID, role, isActiv}
 		const rToken = await TokenService.generateRToken(user.id, payload)
 
-		if(await db.User.addTokens(user.id,[rToken.id])) return rToken.value
+		if(await db.User.addTokens(user.id,[rToken.id])){
+			// TODO сохранить deviceID в user.info
+			return rToken.value
+		}
 		else throw new Error(' generateRToken is failed ')
 	},
 
