@@ -1,4 +1,4 @@
-import { IToken, IUser } from "@models"
+import { IToken, IUser, IUserInfo } from "@models"
 import { mongo as orm } from "./mongo/mongo.js"
 
 export const db = {
@@ -6,7 +6,7 @@ export const db = {
 		find: async (key:{[key in Pick<IUser, "id" | "name" | "email"> as string]:string}):Promise<IUser | null> =>
 			await orm.User.find(key),
 
-		create: async (candidate:Pick<IUser, "name" | "pass" | "email">):Promise<IUser> =>
+		create: async (candidate:Pick<IUser, "name" | "pass" | "email" | "info">):Promise<IUser> =>
 			await orm.User.create(candidate),
 
 		addTokens: async (id:string, tokens:string[]):Promise<boolean> =>

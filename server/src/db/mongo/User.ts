@@ -1,6 +1,5 @@
-import { IUser } from "@models"
+import { IUser, IUserInfo } from "@models"
 import { Schema, model, ObjectId, LeanDocument, Types} from "mongoose"
-import { isArray } from "util"
 
 const UserModel = model<IUser>("User", new Schema<IUser>({
 	name: { type: String, required: true },
@@ -9,7 +8,8 @@ const UserModel = model<IUser>("User", new Schema<IUser>({
 	role: { type: String, required: true, default: "guest" },
 	isActiv: { type: Boolean, default: false },
 	activExp: { type: Date, default: null },
-	jwtTokens: [{ type: Schema.Types.ObjectId, ref: "Token" }]
+	jwtTokens: [{ type: Schema.Types.ObjectId, ref: "Token" }],
+	info: {type: Object, required: true}
 }))
 
 // type R = {[key:string]:any} & {id:string}
@@ -73,13 +73,13 @@ export const User = {
 			})
 	},
 
-	create: async function (candidate:Pick<IUser, "name" | "pass" | "email">){
+	create: async function (candidate:Pick<IUser, "name" | "pass" | "email" | "info">):Promise<IUser>{
 
 		return await UserModel.create(candidate)
 			.then(user => {
 				const id = user._id.toString()
-				const {name, pass, email, role, isActiv, activExp, jwtTokens} = user // TODO не универсально..
-				return {id, name, pass, email, role, isActiv, activExp, jwtTokens}
+				const {name, pass, email, role, isActiv, activExp, jwtTokens, info} = user // TODO не универсально..
+				return {id, name, pass, email, role, isActiv, activExp, jwtTokens, info}
 			})
 			.catch(err => {
 				console.log(" User.create is fail: ",err)

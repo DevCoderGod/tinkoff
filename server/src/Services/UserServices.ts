@@ -1,17 +1,18 @@
-import { IToken, IUser } from "@models"
+import { IToken, IUser, IUserInfo } from "@models"
 import { db } from "../db/db.js"
 import bcrypt from "bcrypt"
 import { IPayload, TokenService } from "./TokenServices.js"
 
 export const UserService = {
 	
-	create: async (candidate:Pick<IUser, "name" | "pass" | "email">):Promise<IUser | null> => {
+	create: async (candidate:Pick<IUser, "name" | "pass" | "email" | "info">):Promise<IUser | null> => {
 		let user:IUser | null = await db.User.find({email:candidate.email})
 		if(user) return null
 		return await db.User.create({
 			name: candidate.name,
 			pass: await bcrypt.hash(candidate.pass,3),
-			email: candidate.email
+			email: candidate.email,
+			info: candidate.info
 		})
 	},
 

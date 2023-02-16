@@ -10,9 +10,9 @@ export const auth = Router()
 
 auth.post('/registration', async (request, response) => {
 	try {
-		const {name, email, pass} = AuthRequestBodyParserAndCheck(request.body,["name", "email", "pass"])
+		const {name, email, pass, info} = AuthRequestBodyParserAndCheck(request.body,["name", "email", "pass", "info"])
 
-		const user:IUser | null = await UserService.create({name, email, pass})
+		const user:IUser | null = await UserService.create({name, email, pass, info})
 		if(user){
 			const {name, email, role, isActiv} = user
 			response.send({name, email, role, isActiv})
@@ -28,7 +28,8 @@ auth.post('/login', async (request, response) => {
 			if(await TokenService.find(rToken)) throw new Error(' Login already done ')
 		}
 
-		const {name, pass, deviceID} = AuthRequestBodyParserAndCheck(request.body,["name", "pass", "deviceID"])
+		const {name, pass, info} = AuthRequestBodyParserAndCheck(request.body,["name", "pass", "info"])
+		const deviceID = info.deviceIDs[0]
 
 		const user:IUser | null = await UserService.login({name, pass}, {deviceID})
 		if(user){

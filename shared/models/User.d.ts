@@ -1,5 +1,9 @@
 import { IToken } from "./Token"
 
+export interface IUserInfo{
+	deviceIDs: string[]
+	[key:string]:any
+}
 export interface IUser{
 	id: string
 	name: string
@@ -9,8 +13,5 @@ export interface IUser{
 	isActiv: boolean
 	activExp: Date | null
 	jwtTokens: IToken[]
-	info?: {
-		deviceIDs: string[]
-		[key:string]:any
-	}
+	info: IUserInfo
 }
