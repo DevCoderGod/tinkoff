@@ -1,5 +1,6 @@
 import { IUser } from "@models"
 import { Schema, model, ObjectId, LeanDocument, Types} from "mongoose"
+import { isArray } from "util"
 
 const UserModel = model<IUser>("User", new Schema<IUser>({
 	name: { type: String, required: true },
@@ -11,24 +12,37 @@ const UserModel = model<IUser>("User", new Schema<IUser>({
 	jwtTokens: [{ type: Schema.Types.ObjectId, ref: "Token" }]
 }))
 
-type R = {[key:string]:any} & {id:string}
+// type R = {[key:string]:any} & {id:string}
+// type DB<I extends {[key:string]:any, id:string}> = Omit<I, "id"> & {_id: Types.ObjectId}
+function change<
+	OBJ extends {[key:string]:any, id:string},
+	DOC extends Omit<OBJ, "id"> & {_id: Types.ObjectId}
+>(doc:DOC):OBJ{
 
-type DB<R> = Omit<R, "id"> & {_id: Types.ObjectId}
-
-function change<T>(doc:DB<T>):R {
-	const res:R = {} as R
-
-	const arr:(keyof DB<T>)[] = Object.keys(doc) as (keyof DB<T>)[]
-
-	arr.forEach((key) => {
+	const res:OBJ = {} as OBJ
+	( Object.keys(doc) as (keyof DOC)[] ).forEach((key) => {
+	
 		if(key === "_id") res.id = doc._id.toString()
 		else if(key === "__v") {}
 		else {
-			const val = doc[key]
-			if(val && typeof val === "object") console.log('val === ',val) //TODO рекурсиво перебрать массивы и объекты
-			Object.defineProperty(res, key, {value: val, writable: true, enumerable: true, configurable: true})
+			const value = doc[key]
+
+			 console.log('val === ',value) 
+			if(value && typeof value === "object"){//TODO рекурсиво перебрать объекты 
+				if(value && Array.isArray(value)){  //TODO рекурсиво перебрать массивы
+
+					console.log(' value is array ')
+				} else {
+					console.log(' value is object ')
+				}
+			}
+
+
+
+			Object.defineProperty(res, key, {value: value, writable: true, enumerable: true, configurable: true})
 		}
 	})
+
 	return res
 }
 
@@ -50,7 +64,7 @@ export const User = {
 				// const id = user._id.toString()
 				// const {name, pass, email, role, isActiv, activExp, jwtTokens} = user // TODO не универсально..
 				// return {id, name, pass, email, role, isActiv, activExp, jwtTokens} //: jwtTokens.map(token => token.id.toString())
-				console.log('...user === ',{...user})
+				// console.log('...user === ',{...user})
 				return user
 			})
 			.catch(err => {
