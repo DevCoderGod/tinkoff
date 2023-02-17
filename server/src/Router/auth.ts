@@ -29,12 +29,11 @@ auth.post('/login', async (request, response) => {
 		}
 
 		const {name, pass, info} = AuthRequestBodyParserAndCheck(request.body,["name", "pass", "info"])
-		const deviceID = info.deviceIDs[0]
 
-		const user:IUser | null = await UserService.login({name, pass}, {deviceID})
+		const user:IUser | null = await UserService.login({name, pass, info})
 		if(user){
 			const {name, email, role, isActiv, jwtTokens} = user
-			const rToken = jwtTokens.find(token => token.deviceID === deviceID)
+			const rToken = jwtTokens.find(token => token.deviceID === info.deviceIDs[0])
 			if(!rToken) throw new Error(' UserService.login is failed ')
 			const ms = Interval.fromDateTimes(DateTime.now(), DateTime.fromISO(rToken.expiration)).toDuration().toMillis()
 			response.cookie("rToken", rToken.value, {maxAge: ms, httpOnly: true})

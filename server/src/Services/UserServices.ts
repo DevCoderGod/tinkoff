@@ -16,13 +16,13 @@ export const UserService = {
 		})
 	},
 
-	login: async (candidate:Pick<IUser, "name" | "pass">, tokenData:Pick<IToken, "deviceID">):Promise<IUser | null> => {
+	login: async (candidate:Pick<IUser, "name" | "pass" | "info">):Promise<IUser | null> => {
 		let user:IUser | null = await db.User.find({name:candidate.name})
 		if(!user) return null
 		if(await bcrypt.compare(candidate.pass,user.pass)){
-			const rToken = user.jwtTokens.find(token => token.deviceID === tokenData.deviceID)
+			const rToken = user.jwtTokens.find(token => token.deviceID === candidate.info.deviceIDs[0])
 			if(rToken)UserService.deleteToken(user, rToken)
-			await UserService.generateRToken(user, tokenData.deviceID)
+			await UserService.generateRToken(user, candidate.info.deviceIDs[0])
 			return await db.User.find({id: user.id})
 		}
 		return null
@@ -37,12 +37,16 @@ export const UserService = {
 	},
 
 	generateRToken: async (user:IUser, deviceID:string):Promise<string> => {
-		const {name, role, isActiv} = user
+		const {name, role, isActiv, info} = user
 		const payload:IPayload = {name, deviceID, role, isActiv}
 		const rToken = await TokenService.generateRToken(user.id, payload)
 
 		if(await db.User.addTokens(user.id,[rToken.id])){
-			// TODO сохранить deviceID в user.info
+			if(!user.info.deviceIDs.find(id => id === deviceID)){
+				const newInfo = {...info}
+				newInfo.deviceIDs.push(deviceID)
+				if(await db.User.updateInfo(user.id, newInfo)) return rToken.value
+			}
 			return rToken.value
 		}
 		else throw new Error(' generateRToken is failed ')

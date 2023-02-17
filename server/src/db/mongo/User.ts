@@ -1,4 +1,4 @@
-import { IUser } from "@models"
+import { IUser, IUserInfo } from "@models"
 import { Schema, model } from "mongoose"
 import { transformToModel } from "./helpers/transformToModel.js"
 
@@ -69,4 +69,14 @@ export const User = {
 				throw new Error(" User.getTokens is fail: ")
 			})
 	},
+
+	updateInfo: async (id:string, info:IUserInfo) => {
+
+		return await UserModel.updateOne({_id:id}, {info:info})
+			.then(query => query.acknowledged && query.modifiedCount>0)
+			.catch (err => {
+				console.log(" User.updateInfo is fail: ",err)
+				throw new Error(" User.updateInfo is fail: ")
+			})
+	}
 }
