@@ -14,6 +14,17 @@ const UserModel = model<IUser>("User", new Schema<IUser>({
 }))
 
 export const User = {
+
+	create: async function (candidate:Pick<IUser, "name" | "pass" | "email" | "info">):Promise<IUser>{
+
+		return await UserModel.create(candidate)
+			.then(user => user.toObject())
+			.then(user => transformToModel<IUser>(user))
+			.catch(err => {
+				console.log(" User.create is fail: ",err)
+				throw new Error("User.create is fail:")
+			})	
+	},
 	
 	find: async function (key:{[key in Pick<IUser, "id" | "name" | "email"> as string]:string}):Promise<IUser | null>{
 		const dbKey = Object.keys(key)[0] === "id" ? {_id: key.id} : {...key} // замена "id" на "_id" в "key"
@@ -21,28 +32,11 @@ export const User = {
 		return await UserModel.findOne(dbKey)
 			.populate("jwtTokens")
 			.lean()
-			.then(user => {
-				if(!user)return null
-				return transformToModel<IUser>(user)
-			})
+			.then(user => user ? transformToModel<IUser>(user) : null)
 			.catch(err => {
 				console.log(" User.findOne is fail: ",err)
 				throw new Error("User.findOne is fail:")
 			})
-	},
-
-	create: async function (candidate:Pick<IUser, "name" | "pass" | "email" | "info">):Promise<IUser>{
-
-		return await UserModel.create(candidate)
-			.then(user => {
-				const id = user._id.toString()
-				const {name, pass, email, role, isActiv, activExp, jwtTokens, info} = user // TODO не универсально..
-				return {id, name, pass, email, role, isActiv, activExp, jwtTokens, info}
-			})
-			.catch(err => {
-				console.log(" User.create is fail: ",err)
-				throw new Error("User.create is fail:")
-			})	
 	},
 
 	addTokens: async function (id:string, tokens:string[]){
