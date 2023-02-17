@@ -1,5 +1,6 @@
-import { IUser, IUserInfo } from "@models"
-import { Schema, model, ObjectId, LeanDocument, Types} from "mongoose"
+import { IUser } from "@models"
+import { Schema, model } from "mongoose"
+import { transformToModel } from "./helpers/transformToModel.js"
 
 const UserModel = model<IUser>("User", new Schema<IUser>({
 	name: { type: String, required: true },
@@ -12,40 +13,6 @@ const UserModel = model<IUser>("User", new Schema<IUser>({
 	info: {type: Object, required: true}
 }))
 
-// type R = {[key:string]:any} & {id:string}
-// type DB<I extends {[key:string]:any, id:string}> = Omit<I, "id"> & {_id: Types.ObjectId}
-function change<
-	OBJ extends {[key:string]:any, id:string},
-	DOC extends Omit<OBJ, "id"> & {_id: Types.ObjectId}
->(doc:DOC):OBJ{
-
-	const res:OBJ = {} as OBJ
-	( Object.keys(doc) as (keyof DOC)[] ).forEach((key) => {
-	
-		if(key === "_id") res.id = doc._id.toString()
-		else if(key === "__v") {}
-		else {
-			const value = doc[key]
-
-			 console.log('val === ',value) 
-			if(value && typeof value === "object"){//TODO рекурсиво перебрать объекты 
-				if(value && Array.isArray(value)){  //TODO рекурсиво перебрать массивы
-
-					console.log(' value is array ')
-				} else {
-					console.log(' value is object ')
-				}
-			}
-
-
-
-			Object.defineProperty(res, key, {value: value, writable: true, enumerable: true, configurable: true})
-		}
-	})
-
-	return res
-}
-
 export const User = {
 	
 	find: async function (key:{[key in Pick<IUser, "id" | "name" | "email"> as string]:string}):Promise<IUser | null>{
@@ -56,16 +23,7 @@ export const User = {
 			.lean()
 			.then(user => {
 				if(!user)return null
-				return change(user) as IUser
-			})
-			.then(user => {
-				// if(!user)return null
-				// console.log('user === ',user)
-				// const id = user._id.toString()
-				// const {name, pass, email, role, isActiv, activExp, jwtTokens} = user // TODO не универсально..
-				// return {id, name, pass, email, role, isActiv, activExp, jwtTokens} //: jwtTokens.map(token => token.id.toString())
-				// console.log('...user === ',{...user})
-				return user
+				return transformToModel<IUser>(user)
 			})
 			.catch(err => {
 				console.log(" User.findOne is fail: ",err)
