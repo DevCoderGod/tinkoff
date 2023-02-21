@@ -1,4 +1,8 @@
 export interface IToken{
-	aToken: string
-	rToken: string
+	id: string
+	userID: string
+	deviceID: string
+	value: string
+	type: "access" | "refresh"
+	expiration: string //ISO 8601
 }
