@@ -1,7 +1,11 @@
 import { IToken } from './Token'
-import { IUser } from './User'
+import { IUser, IUserInfo } from './User'
+import { TAuthRequestBody, TAuthRequestCookies } from './Requests'
 
 export {
 	IToken,
-	IUser
+	IUser,
+	IUserInfo,
+	TAuthRequestBody,
+	TAuthRequestCookies
 }
