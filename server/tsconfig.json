@@ -16,6 +16,7 @@
 			"@proto/*": ["../shared/tsproto/*"]
 		}
 	},
+	"include": ["src/**/*", "tests/**/*"],
 	"references": [
 		{
 			"path": "../shared"

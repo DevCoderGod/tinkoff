@@ -4,6 +4,7 @@
   "author": "devcodergod",
   "description": "",
   "scripts": {
+	"getGRPC": "npm run getGRPC --prefix server",
     "getProto": "npm run getProto --prefix shared",
     "dev:server": "npm run start --prefix server",
     "prod:server": "npm run prod --prefix server",
