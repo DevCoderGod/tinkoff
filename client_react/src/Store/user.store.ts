@@ -1,5 +1,5 @@
 import { makeObservable, observable, computed, action } from 'mobx'
-import { IUser } from '@models/Models'
+import { IUser, TAuthRequestBody } from '@models/Models'
 import { app } from "./app.store"
 import { Api } from 'src/Api'
 
@@ -20,11 +20,10 @@ export class CUserStore{
 		return this.user
 	}
 
-	login = (userName:string) => {
+	login = async (userData:TAuthRequestBody) => {
 		try {
-			this.user = Api.user.login(userName)
-			if(!this.user)app.setIsAuth(false)
-			else app.setIsAuth(true)
+			this.user = await Api.user.login(userData)
+			app.setIsAuth(!!this.user)
 		} catch (err) {
 			console.log(' Ошибка входа! ');
 		}

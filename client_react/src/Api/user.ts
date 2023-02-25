@@ -1,18 +1,13 @@
+import { TAuthRequestBody } from "@models/Models";
 import { IUser } from "@models/User";
+import { fetchJSON } from "./requests";
 
 class CUserApi {
 
-	login = (username:string):IUser | null => {
-		if(!username) return null
-		const user:IUser = {
-			email:username,
-			name:username
-		}
-		const userFetch = fetch('http://localhost:5000/u')
-		.then((res)=> res.text())
-		.then((d)=> {console.log('d === ',d)})
-
-		return user
+	login = async (userData:TAuthRequestBody):Promise<IUser | null> => {
+		if(!userData) return null
+		
+		return await fetchJSON<TAuthRequestBody,IUser>('http://localhost:5000/u', "POST", userData)
 	};
 
 	logout = () => {

@@ -1,9 +1,9 @@
 {
   "references": [
-	{
-		"path": "../shared"
-	}
-  ],	
+    {
+      "path": "../shared"
+    }
+  ],
   "compilerOptions": {
     "target": "es5",
     "lib": [
@@ -43,6 +43,5 @@
   },
   "include": [
     "src"
-  ],
-
+  ]
 }

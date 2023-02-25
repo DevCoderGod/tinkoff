@@ -8,7 +8,16 @@ export const Home = observer(() => {
     const ref = useRef<HTMLInputElement>(null)
 	const user:string = JSON.stringify(Store.user.getUser,null,2)
 
-	const login = async() => await Store.user.login(ref.current?.value??"")
+	const login = async() => await Store.user.login({
+		name: "Roma",
+	    pass: "12345",
+		email: "roma@mail.ru",
+	    info:{
+	        deviceIDs: [
+	            "comp3"
+	        ]
+	    }
+	})//ref.current?.value??"")
 
 	return(
 		<div>
