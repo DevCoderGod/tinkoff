@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"target": "ES2020",
+		"esModuleInterop": true,
+		"allowJs": true,
+		"forceConsistentCasingInFileNames": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"outDir": "build",
+		"baseUrl": ".",
+		"rootDir": "./src",
+		"skipLibCheck": true,
+		"strict": true,
+		"paths": {
+			"@models": ["../shared/models/Models"],
+			"@proto/*": ["../shared/tsproto/*"]
+		}
+	},
+	"include": ["src/**/*", "tests/**/*"],
+	"references": [
+		{
+			"path": "../shared"
+		}
+	]	
+}

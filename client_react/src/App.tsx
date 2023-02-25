@@ -1,8 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { observer } from "mobx-react-lite"
 import { Store } from "src/Store"
-// import { Router } from './Router';
-// import { Header } from './components/Header';<Header/>
 import { Home } from "./pages/Home"
 import { Auth } from "./pages/Auth"
 import { Portfolio } from "./pages/Portfolio"
@@ -37,4 +35,4 @@ export const App = observer(function App(){
 	)
 })
 
-export default App;
+export default App

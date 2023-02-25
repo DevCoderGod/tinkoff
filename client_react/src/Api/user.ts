@@ -7,7 +7,7 @@ class CUserApi {
 	login = async (userData:TAuthRequestBody):Promise<IUser | null> => {
 		if(!userData) return null
 		
-		return await fetchJSON<TAuthRequestBody,IUser>('http://localhost:5000/u', "POST", userData)
+		return await fetchJSON<TAuthRequestBody,IUser>('http://localhost:3000/auth/login', "POST", userData)
 	};
 
 	logout = () => {
