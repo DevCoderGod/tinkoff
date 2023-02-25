@@ -5,6 +5,7 @@
   "description": "",
   "scripts": {
     "getProto": "npm run getProto --prefix shared",
+	"getGRPC": "npm run getGRPC --prefix server",
     "dev:server": "npm run start --prefix server",
     "prod:server": "npm run prod --prefix server",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,7 +17,6 @@
   },
   "devDependencies": {
     "@protobuf-ts/plugin": "^2.8.2",
-    "@protobuf-ts/runtime": "^2.8.2",
     "typescript": "^4.8.4"
   }
 }
