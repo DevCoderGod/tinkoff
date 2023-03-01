@@ -1,3 +1,4 @@
+import { ButtonLogout } from "./ButtonLogout"
 import { MainMenu } from "./MainMenu"
 
 interface IProps {
@@ -6,9 +7,14 @@ interface IProps {
 
 export const Header = (props:IProps) => {
 	return(
-		<header>
+		<header style={{
+			"display":"flex",
+			"alignItems":"center",
+			"marginLeft":"20px"
+		}}>
 			<h1>{props.title}</h1>
 			<MainMenu/>
+			<ButtonLogout/>
 		</header>
 	)
 }

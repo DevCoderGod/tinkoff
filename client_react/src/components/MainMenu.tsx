@@ -2,31 +2,39 @@ import { Store } from "../Store"
 import { Link } from "react-router-dom"
 import { observer } from "mobx-react-lite"
 
+const Point = (props:{
+	path:string,
+	children:any
+}) => {
+	return(
+		<div style={{
+			"marginLeft":"20px",
+		}}>
+			<Link to= {props.path}>{props.children}</Link>
+		</div>
+	)
+}
+
 export const MainMenu = observer(function MainMenu(){
 	return(
-		<div>
+		<div style={{
+			"display":"flex",
+			"alignItems":"center",
+			"marginLeft":"20px",
+
+		}}>
 			{Store.app.isAuth &&
 				<>
-					<div>
-						<Link to="/">Home</Link>
-					</div>
-					<div>
-						<Link to="/portfolio">Портфель</Link>
-					</div>
-					<div>
-						<Link to="/terminal">terminal</Link>
-					</div>
+					<Point path="/">Home</Point>
+					<Point path="/portfolio">Портфель</Point>
+					<Point path="/terminal">terminal</Point>
 				</>
 			}
 
 			{!Store.app.isAuth &&
 				<>
-					<div>
-						<Link to="/">Home</Link>
-					</div>
-					<div>
-						<Link to="/auth">auth</Link>
-					</div>
+					<Point path="/">Home</Point>
+					<Point path="/auth">Вход</Point>
 				</>
 			}
 		</div>
