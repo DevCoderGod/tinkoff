@@ -1,9 +1,9 @@
 import { Header } from "src/components/Header"
 
-export const Portfolio = () => {
+export const TradeSpace = () => {
 	return(
 		<>
-			<Header title="Portfolio"/>
+			<Header title="TradeSpace"/>
 		</>
 	)
 }

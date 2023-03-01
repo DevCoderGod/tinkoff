@@ -26,7 +26,7 @@ export const MainMenu = observer(function MainMenu(){
 			{Store.app.isAuth &&
 				<>
 					<Point path="/">Home</Point>
-					<Point path="/portfolio">Портфель</Point>
+					<Point path="/tradeSpace">tradeSpace</Point>
 					<Point path="/terminal">terminal</Point>
 				</>
 			}
