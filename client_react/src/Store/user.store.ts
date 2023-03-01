@@ -4,7 +4,7 @@ import { app } from "./app.store"
 import { Api } from 'src/Api'
 
 export class CUserStore{
-	user: IUser | null
+	user: Pick<IUser, "name"| "email" | "role"  | "isActiv"> | null
 
 	constructor() {
         makeObservable(this, {
@@ -38,6 +38,7 @@ export class CUserStore{
 	}
 
 	async logout():Promise<void>{
+		console.log('this.user === ',this.user)
 		const logout = await Api.user.logout()
 		console.log('logout === ',logout)
 		this.setUser(null)
