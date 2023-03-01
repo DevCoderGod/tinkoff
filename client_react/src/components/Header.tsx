@@ -1,7 +1,11 @@
-export const Header = () => {
+interface IProps {
+	title:string
+}
+
+export const Header = (props:IProps) => {
 	return(
 		<header>
-			<h1>Header</h1>
+			<h1>{props.title}</h1>
 		</header>
 	)
 }

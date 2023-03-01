@@ -9,28 +9,38 @@ export class CUserStore{
 	constructor() {
         makeObservable(this, {
             user: observable,
-            getUser: computed,
+            userName: computed,
+			setUser:action,
 			login:action,
 			logout:action,
         })
         this.user = null
 	}
 
-	get getUser(){
-		return this.user
+	get userName(){
+		return this.user?.name
 	}
 
-	login = async (userData:TAuthRequestBody) => {
+	setUser(user:any){
+		this.user = user
+	}
+	
+	async login(userData:TAuthRequestBody):Promise<boolean>{
 		try {
-			this.user = await Api.user.login(userData)
+			this.setUser(await Api.user.login(userData))
 			app.setIsAuth(!!this.user)
+			return true
 		} catch (err) {
-			console.log(' Ошибка входа! ');
+			app.setIsAuth(false)
+			console.log(' Ошибка входа! ', err)
+			return false
 		}
 	}
 
-	logout = () => {
-		this.user = Api.user.logout()
+	async logout():Promise<void>{
+		const logout = await Api.user.logout()
+		console.log('logout === ',logout)
+		this.setUser(null)
 		app.setIsAuth(false)
 	}
 }

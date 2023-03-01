@@ -1,37 +1,13 @@
-import { useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { observer } from "mobx-react-lite";
+import { Link } from 'react-router-dom'
+import { observer } from "mobx-react-lite"
 import { Store } from "src/Store"
+import { Header } from 'src/components/Header'
 
-export const Home = observer(() => {
-
-    const ref = useRef<HTMLInputElement>(null)
-	const user:string = JSON.stringify(Store.user.getUser,null,2)
-
-	const login = async() => await Store.user.login({
-		name: "Roma",
-	    pass: "12345",
-		email: "roma@mail.ru",
-	    info:{
-	        deviceIDs: [
-	            "comp3"
-	        ]
-	    }
-	})//ref.current?.value??"")
-
+export const Home = observer(function Home(){
 	return(
 		<div>
-			<h1>Home</h1>
-			<div>
-				<input
-					ref={ref}
-					type="text"
-				/>
-			</div>
+			<Header title="Home"/>
 
-			<div>
-				<button onClick={login}>Вход</button>
-			</div>
 			<div>
 				<Link to="/portfolio">Портфель</Link>
 			</div>
@@ -41,12 +17,9 @@ export const Home = observer(() => {
 			<div>
 				<Link to="/terminal">terminal</Link>
 			</div>
-			<div>
-				{Store.user.user?.email}
-			</div>
 
 			<div>
-				{user}
+				userName = {Store.user.userName}
 			</div>
 		</div>
 	)
