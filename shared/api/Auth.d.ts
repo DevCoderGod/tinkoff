@@ -1,4 +1,4 @@
-import { IToken, IUser } from "../models/Models"
+import { IToken, IUser, TUserClientStore } from "../models/Models"
 
 export interface InfoResponse {message:string}
 
@@ -6,7 +6,7 @@ export interface RegRequest extends Pick<IUser, "name" | "email" | "pass" | "inf
 export interface RegResponse extends Pick<IUser, "name" | "email" | "role">{} // TODO или {message:string}
 
 export interface LoginRequest extends Pick<IUser, "name" | "pass" | "info">{}
-export interface LoginResponse {token:string, user: Pick<IUser, "name" | "email" | "role" | "isActiv">}
+export interface LoginResponse {token:string, user: TUserClientStore}
 
 export interface RefreshResponse {token:string}
 
