@@ -10,11 +10,8 @@ export interface IPayload extends Pick<JwtPayload, "exp">, Pick<IUser, "name" | 
 
 export const TokenService = {
 	
-	generateAToken: async (payload: IPayload):Promise<string> => {
-		// console.log('expiration === ',DateTime.now().plus(Duration.fromISO(VARS.aTokenExpired)).toISO())
-		const exp = DateTime.now().plus(Duration.fromISO(VARS.aTokenExpired))
-		payload.exp = exp.toSeconds()
-
+	generateAToken: (payload: IPayload):string => {
+		payload.exp = DateTime.now().plus(Duration.fromISO(VARS.aTokenExpired)).toSeconds()
 		return jwt.sign(payload, VARS.aTokenSecret)
 	},
 
@@ -31,8 +28,13 @@ export const TokenService = {
 		})
 	},
 
-	verifyAToken: (tokenString:string):IPayload => {
-		return jwt.verify(tokenString, VARS.aTokenSecret,{ complete: true }).payload as IPayload
+	verifyAToken: (tokenString:string):IPayload | false => {
+		try {
+			return jwt.verify(tokenString, VARS.aTokenSecret,{ complete: true }).payload as IPayload
+		} catch (err:any) {
+			console.log(' verifyRToken is err: ',err.message)
+			return false
+		}
 	},
 
 	verifyRToken: (tokenString:string): IPayload | false => {
@@ -42,7 +44,6 @@ export const TokenService = {
 			console.log(' verifyRToken is err: ',err.message)
 			return false
 		}
-
 	},
 
 	delete: async (tokenString:string):Promise<boolean> => {

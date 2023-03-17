@@ -13,6 +13,7 @@
 		"strict": true,
 		"paths": {
 			"@models": ["../shared/models/Models"],
+			"@api": ["../shared/api/Api"],
 			"@proto/*": ["../shared/tsproto/*"]
 		}
 	},

@@ -1,61 +1,77 @@
-import { IToken, IUser, IUserInfo } from "@models"
+import { IToken, IUser, TUserClientStore } from "@models"
+import { TAuth } from '@api'
 import { db } from "../db/db.js"
 import bcrypt from "bcrypt"
 import { IPayload, TokenService } from "./TokenServices.js"
 
 export const UserService = {
 	
-	create: async (candidate:Pick<IUser, "name" | "pass" | "email" | "info">):Promise<IUser | null> => {
-		let user:IUser | null = await db.User.find({email:candidate.email})
-		if(user) return null
+	create: async (candidate:TAuth.RegRequest):Promise<TAuth.RegResponse | TAuth.InfoResponse> => {
+		const user = await db.User.find({email:candidate.email})
+		if(user) return {message: "user already exists"}
+
 		return await db.User.create({
 			name: candidate.name,
 			pass: await bcrypt.hash(candidate.pass,3),
 			email: candidate.email,
 			info: candidate.info
 		})
+			.then(user => {
+				const {name, email, role} = user
+				return {name, email, role}
+			})
 	},
 
-	login: async (candidate:Pick<IUser, "name" | "pass" | "info">):Promise<IUser | null> => {
-		let user:IUser | null = await db.User.find({name:candidate.name})
-		if(!user) return null
-		if(await bcrypt.compare(candidate.pass,user.pass)){
-			const rToken = user.jwtTokens.find(token => token.deviceID === candidate.info.deviceIDs[0])
-			if(rToken)UserService.deleteToken(user, rToken)
-			await UserService.generateRToken(user, candidate.info.deviceIDs[0])
-			return await db.User.find({id: user.id})
-		}
-		return null
+	login: async (candidate:TAuth.LoginRequest):Promise<{user:TUserClientStore, aTokenString:string, rTokenString:string, rTokenExp:string} | TAuth.InfoResponse> => {
+		const user = await db.User.find({name:candidate.name})
+		if(!user) return {message: 'user not found'}
+		if(!await bcrypt.compare(candidate.pass,user.pass)) return {message: 'bad login or pass'}
+
+		const {name, email, role, isActiv} = user
+
+
+		return {user:{name, email, role, isActiv}, ...await UserService.generateTokens(user, candidate.info.deviceIDs[0])}
 	},
 
 	logout: async (rTokenString:string):Promise<boolean> => {
-		const rToken:IToken | null = await TokenService.find(rTokenString)
+		const rToken = await TokenService.find(rTokenString)
 		if(!rToken) return false
-		const user:IUser | null = await db.User.find({id:rToken.userID})
-		if(user && await UserService.deleteToken(user, rToken) && await TokenService.delete(rTokenString)) return true
+		const user = await db.User.find({id:rToken.userID})
+		if(user && await UserService.deleteToken(user, rToken)) return true
 		return false
 	},
 
-	generateRToken: async (user:IUser, deviceID:string):Promise<string> => {
-		const {name, role, isActiv, info} = user
-		const payload:IPayload = {name, deviceID, role, isActiv}
-		const rToken = await TokenService.generateRToken(user.id, payload)
-
-		if(await db.User.addTokens(user.id,[rToken.id])){
-			if(!user.info.deviceIDs.find(id => id === deviceID)){
-				const newInfo = {...info}
-				newInfo.deviceIDs.push(deviceID)
-				if(await db.User.updateInfo(user.id, newInfo)) return rToken.value
-			}
-			return rToken.value
-		}
-		else throw new Error(' generateRToken is failed ')
+	generateTokens: async (user:IUser, deviceID:string):Promise<{aTokenString:string, rTokenString:string, rTokenExp:string}> => {
+		const rToken = user.jwtTokens.find(token => token.deviceID === deviceID)
+		if(rToken) await UserService.deleteToken(user, rToken)
+		const {rTokenString, rTokenExp} = await UserService.generateRToken(user, deviceID)
+		const aTokenString = UserService.generateAToken(user,deviceID)
+		return {aTokenString, rTokenString, rTokenExp}
 	},
 
-	generateAToken: async (user:IUser, deviceID:string):Promise<string> => {
+	generateRToken: async (user:IUser, deviceID:string):Promise<{rTokenString:string, rTokenExp:string}> => {
+		const {name, role, isActiv, info} = user
+		const payload:IPayload = {name, role, isActiv, deviceID}
+		const rToken:IToken = await TokenService.generateRToken(user.id, payload)
+
+		return await db.User.addTokens(user.id,[rToken.id])
+			.then(async addTokens => {
+				if(!addTokens) throw new Error('addTokens is unsuccessful')
+				if(!user.info.deviceIDs.find(id => id === deviceID)){
+					const newInfo = {...info}
+					newInfo.deviceIDs.push(deviceID)
+					await db.User.updateInfo(user.id, newInfo)
+						.catch(err => {throw new Error('generateRToken is failed')})
+				}
+				return {rTokenString: rToken.value, rTokenExp: rToken.expiration}
+			})
+			.catch(err => {throw new Error("generateRToken is failed")})
+	},
+
+	generateAToken: (user:IUser, deviceID:string):string => {
 		const {name, role, isActiv} = user
-		const payload:IPayload = {name, deviceID, role, isActiv}
-		return await TokenService.generateAToken(payload)
+		const payload:IPayload = {name, role, isActiv, deviceID}
+		return TokenService.generateAToken(payload)
 	},
 
 	deleteToken: async (user:IUser, rToken:IToken):Promise<boolean> => {
@@ -66,11 +82,16 @@ export const UserService = {
 		return await db.User.updateTokens(user.id, tokens) && await TokenService.delete(rToken.value)
 	},
 
-	refreshAToken: async (rTokenString:string):Promise<string> => {
-		const userData:IPayload | false = TokenService.verifyRToken(rTokenString)
-		if(!userData) return ""
-		let user:IUser | null = await db.User.find({name:userData.name})
-		if(!user) throw new Error(' refreshTocken is failed ')
-		return await UserService.generateAToken(user, userData.deviceID)
+	refreshTokens: async (rToken:string):Promise<{aTokenString:string, rTokenString:string, rTokenExp:string}> => {
+		const userData:IPayload | false = TokenService.verifyRToken(rToken)
+		if(!userData) throw new Error('bad rToken')
+		let user = await db.User.find({name:userData.name})
+		if(!user) throw new Error(' user not found ')
+		const i = user.jwtTokens.findIndex(token => token.value === rToken)
+		if(i == -1) throw new Error('rToken not found')
+		await UserService.deleteToken(user, user.jwtTokens[i])
+			.then(deleteToken => {if(!deleteToken) throw new Error('deleteToken is unsuccessful')})
+
+		return await UserService.generateTokens(user,userData.deviceID)
 	},
 }
