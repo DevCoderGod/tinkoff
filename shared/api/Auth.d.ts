@@ -1,5 +1,7 @@
 import { IToken, IUser } from "../models/Models"
 
+export interface InfoResponse {message:string}
+
 export interface RegRequest extends Pick<IUser, "name" | "email" | "pass" | "info">{}
 export interface RegResponse extends Pick<IUser, "name" | "email" | "role">{} // TODO или {message:string}
 
