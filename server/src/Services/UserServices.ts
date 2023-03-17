@@ -3,6 +3,7 @@ import { TAuth } from '@api'
 import { db } from "../db/db.js"
 import bcrypt from "bcrypt"
 import { IPayload, TokenService } from "./TokenServices.js"
+import { ObjectParser } from "../helpers/ObjectParser.js"
 
 export const UserService = {
 	
@@ -15,11 +16,7 @@ export const UserService = {
 			pass: await bcrypt.hash(candidate.pass,3),
 			email: candidate.email,
 			info: candidate.info
-		})
-			.then(user => {
-				const {name, email, role} = user
-				return {name, email, role}
-			})
+		}).then(user => ObjectParser<IUser,TAuth.RegResponse>(user,["name", "email", "role"]))
 	},
 
 	login: async (candidate:TAuth.LoginRequest):Promise<{user:TUserClientStore, aTokenString:string, rTokenString:string, rTokenExp:string} | TAuth.InfoResponse> => {
@@ -27,10 +24,10 @@ export const UserService = {
 		if(!user) return {message: 'user not found'}
 		if(!await bcrypt.compare(candidate.pass,user.pass)) return {message: 'bad login or pass'}
 
-		const {name, email, role, isActiv} = user
-
-
-		return {user:{name, email, role, isActiv}, ...await UserService.generateTokens(user, candidate.info.deviceIDs[0])}
+		return {
+			user: ObjectParser<IUser,TUserClientStore>(user,["name", "email", "role", "isActiv"]),
+			...await UserService.generateTokens(user, candidate.info.deviceIDs[0])
+		}
 	},
 
 	logout: async (rTokenString:string):Promise<boolean> => {
