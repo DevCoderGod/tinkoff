@@ -18,7 +18,7 @@ export const Token = {
 			.then(token => transformToModel<IToken>(token))
 			.catch(err => {
 				console.log(" Token.create is fail: ",err)
-				throw new Error("Token.create is fail: ")
+				throw new Error("Token.create is fail")
 			})
 	},
 
@@ -30,18 +30,16 @@ export const Token = {
 			.then(token => token ? transformToModel<IToken>(token) : null)
 			.catch((err) =>{
 				console.log(" Token.findOne is fail: ",err)
-				throw new Error("Token.findOne is fail:")
+				throw new Error("Token.findOne is fail")
 			})		
 	},
 
 	delete:async (token:string) => {
-
 		return await TokenModel.deleteOne({value: token})
-			.then(()=>true)
+			.then(query => !!query.deletedCount)
 			.catch(err=> {
-				console.log(" Token.deleteOne is fail: ",err)
-				// throw new Error("Token.deleteOne is fail: ")
-				return false
+				console.log(`Token.deleteOne is fail: "${err}, token = ${token}`)
+				throw new Error(`Token.deleteOne is fail: ${err}`)
 			})
 	}
 }

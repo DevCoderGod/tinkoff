@@ -16,3 +16,5 @@ export interface IUser{
 	jwtTokens: IToken[]
 	info: IUserInfo
 }
+
+export interface TUserClientStore extends Pick<IUser, "name"| "email" | "role"  | "isActiv">{}
