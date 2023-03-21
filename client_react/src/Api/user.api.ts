@@ -1,18 +1,18 @@
-import { TAuthRequestBody } from "@models/Models"
-import { IUser } from "@models/User"
+import { TAuth } from "@api"
+import { IUser } from "@models"
 import { fetchJSON } from "./requests"
 import { server } from "../globalVars"
 
 class CUserApi {
 
-	login = async (userData:TAuthRequestBody):Promise<IUser | null> => {
+	login = async (userData:TAuth.LoginRequest):Promise<IUser | null> => {
 		if(!userData) return null
 		
-		return await fetchJSON<TAuthRequestBody,IUser>(`${server}auth/login`, "POST", userData)
+		return await fetchJSON<TAuth.LoginRequest,IUser>(`${server}auth/login`, "POST", userData)
 	}
 
 	logout = async():Promise<boolean|null> => {
-		return await fetchJSON<TAuthRequestBody,boolean>(`${server}auth/logout`, "POST")
+		return await fetchJSON<TAuth.LoginRequest,boolean>(`${server}auth/logout`, "POST")
 	}
 }
 

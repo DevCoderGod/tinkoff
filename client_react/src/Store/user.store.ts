@@ -1,5 +1,6 @@
 import { makeObservable, observable, computed, action } from 'mobx'
-import { IUser, TAuthRequestBody } from '@models/Models'
+import { IUser } from '@models'
+import { TAuth } from '@api'
 import { app } from "./app.store"
 import { Api } from 'src/Api'
 
@@ -25,7 +26,7 @@ export class CUserStore{
 		this.user = user
 	}
 	
-	async login(userData:TAuthRequestBody):Promise<boolean>{
+	async login(userData:TAuth.LoginRequest):Promise<boolean>{
 		try {
 			this.setUser(await Api.user.login(userData))
 			app.setIsAuth(!!this.user)

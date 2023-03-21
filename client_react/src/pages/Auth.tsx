@@ -24,7 +24,6 @@ export const Auth = () => {
 		setstatusLogin(await Store.user.login({
 			name: refNam.current?.value!,
 		    pass: refPas.current?.value!,
-			email: "",
 		    info:{
 		        deviceIDs: [
 		            userAgent

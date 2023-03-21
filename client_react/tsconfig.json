@@ -27,15 +27,11 @@
     "rootDir": ".",
 	"baseUrl": ".",
 	"paths": {
-	  "@helpers/*": [
-		"./src/helpers/*"
-	  ],
-	  "@models/*": [
-		"../shared/models/*"
-	  ],
-	  "@proto/*": [
-		"../shared/tsproto/*"
-	  ],
+	  "@helpers/*": ["./src/helpers/*"],
+	  "@models": ["../shared/models/Models"],
+	  "@api": ["../shared/api/Api"],
+	  "@proto/*": ["../shared/tsproto/*"],
+
 	  "@store": [
 		"src/Store"
 	  ]
