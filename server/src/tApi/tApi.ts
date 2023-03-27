@@ -1,6 +1,8 @@
-import { readFileSync } from 'fs'
 import grpc from "@grpc/grpc-js"
 import { GrpcTransport } from "@protobuf-ts/grpc-transport"
+import { tServer } from '../globalVars.js'
+
+// TODO reference to shared
 import { InstrumentsServiceClient } from './grpc/instruments.client.js'
 import { MarketDataServiceClient, MarketDataStreamServiceClient } from './grpc/marketdata.client.js'
 import { OperationsServiceClient, OperationsStreamServiceClient } from './grpc/operations.client.js'
@@ -9,32 +11,63 @@ import { SandboxServiceClient } from './grpc/sandbox.client.js'
 import { StopOrdersServiceClient } from './grpc/stoporders.client.js'
 import { UsersServiceClient } from "./grpc/users.client.js"
 
-const token = readFileSync('token.txt', 'utf8')
-const server = 'invest-public-api.tinkoff.ru:443'
 
-const metadata = new grpc.Metadata()
-metadata.add('Authorization', 'Bearer ' + token)
+function getTransport(token:string): GrpcTransport{
+	const metadata = new grpc.Metadata()
+	metadata.add('Authorization', 'Bearer ' + token)
+	const metadataCreds = grpc.credentials.createFromMetadataGenerator(function(args, callback) {
+		callback(null, metadata)
+	})
 
-const metadataCreds = grpc.credentials.createFromMetadataGenerator(function(args, callback) {
-	callback(null, metadata)
-})
+	return new GrpcTransport({
+		host: tServer,
+		channelCredentials: grpc.credentials.combineChannelCredentials(grpc.credentials.createSsl(), metadataCreds)
+	})
+}
+export class CTApi {
 
-const ssl_creds = grpc.credentials.combineChannelCredentials(grpc.credentials.createSsl(), metadataCreds)
+	instruments: InstrumentsServiceClient
+	marketData: MarketDataServiceClient
+	marketDataStream: MarketDataStreamServiceClient
+	operations: OperationsServiceClient
+	operationsStream: OperationsStreamServiceClient
+	orders: OrdersServiceClient
+	ordersStream: OrdersStreamServiceClient
+	sandbox: SandboxServiceClient
+	stopOrders: StopOrdersServiceClient
+	users: UsersServiceClient
 
-const transport = new GrpcTransport({
-	host: server,
-	channelCredentials: ssl_creds
-})
+	constructor(token:string){
+		const transport = getTransport(token)
 
-export const tApi = {
-	instrument: new InstrumentsServiceClient(transport),
-	marketData: new MarketDataServiceClient(transport),
-	marketDataStream: new MarketDataStreamServiceClient(transport),
-	operations: new OperationsServiceClient(transport),
-	operationsStream: new OperationsStreamServiceClient(transport),
-	orders: new OrdersServiceClient(transport),
-	ordersStream: new OrdersStreamServiceClient(transport),
-	sandbox: new SandboxServiceClient(transport),
-	stopOrders: new StopOrdersServiceClient(transport),
-	user: new UsersServiceClient(transport),
+		this.instruments = new InstrumentsServiceClient(transport)
+		this.marketData = new MarketDataServiceClient(transport)
+		this.marketDataStream = new MarketDataStreamServiceClient(transport)
+		this.operations = new OperationsServiceClient(transport)
+		this.operationsStream = new OperationsStreamServiceClient(transport)
+		this.orders = new OrdersServiceClient(transport)
+		this.ordersStream = new OrdersStreamServiceClient(transport)
+		this.sandbox = new SandboxServiceClient(transport)
+		this.stopOrders = new StopOrdersServiceClient(transport)
+		this.users = new UsersServiceClient(transport)
+	}
+}
+
+// local token
+import { readFileSync } from 'fs'
+
+export const getApi = () => {
+	const transport = getTransport(readFileSync('token.txt', 'utf8'))
+	return {
+		instruments: new InstrumentsServiceClient(transport),
+		marketData: new MarketDataServiceClient(transport),
+		marketDataStream: new MarketDataStreamServiceClient(transport),
+		operations: new OperationsServiceClient(transport),
+		operationsStream: new OperationsStreamServiceClient(transport),
+		orders: new OrdersServiceClient(transport),
+		ordersStream: new OrdersStreamServiceClient(transport),
+		sandbox: new SandboxServiceClient(transport),
+		stopOrders: new StopOrdersServiceClient(transport),
+		users: new UsersServiceClient(transport),
+	}	
 }

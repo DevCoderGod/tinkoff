@@ -1,24 +1,46 @@
 import { Request, Response, Router } from 'express'
-import { IPayload } from 'src/Services/TokenServices'
-import { tApi } from '../tApi/tApi.js'
+import { Worker } from 'worker_threads'
+import { IToken } from "@models"
 
 export const tinkoff = Router()
 
-// tinkoff.post('/connect', async (request, response) => {
-// 	try {
-// 		const {rToken} = AuthRequestCookiesParserAndCheck(request.cookies,["rToken"])
-// 		if(!rToken) throw new Error(' test: token is undefined. ')
-// 		const userData = TokenService.verifyRToken(rToken)
-// 		if(!userData) throw new Error(' test: token is invalid. ')
-// 		userData.name
-// 		response.send('test auth')
-// 		console.log(' test auth ')
-// 	} catch (err) {
-// 		response.status(500).json({message: ` ${err} `})
-// 	}
-// })
-type userData = {user:IPayload}
+tinkoff.post('/connect', async (request:Request<{},any,{token: IToken["value"] | null}>, response:Response) => {
+	try {
+		const token = request.body ? request.body.token : null
+		if(!token){ throw new Error(' bad TToken ')}
 
-tinkoff.get('/getInfo', async(req:Request, res:Response<any,IPayload>) => {
-	res.send(await tApi.user.getInfo(req.body).response)
+		const port = 8999 // TODO dynamic port.. pool of ports
+		const workerData ={token, port}
+		const worker = new Worker("../server/build/Worker/worker.js",{ workerData })
+
+		worker.on('message', m => messageHandler(worker, m))
+		worker.on('error', err => errorHandler(worker, err))
+		worker.on('exit', exitCode => exitHandler(worker, exitCode))
+		
+	} catch (err) {
+		response.status(500).json({message: ` ${err} `})
+	}
+
+	function messageHandler(worker: Worker,m: any): void {
+		if(m.port) response.status(200).json({port:m.port})
+		if(m === "exit") worker.postMessage("terminate")
+	}
+	
+	function errorHandler(worker: Worker, err: Error): void {
+		console.log('error err === ',err)
+	}
+
+	function exitHandler(worker: Worker, exitCode: number): void {
+		console.log('exit exitCode === ',exitCode)
+	}	
+})
+
+//test local token
+import { getApi } from '../tApi/tApi.js'
+import { GetInfoResponse } from "@tinkoff/users"
+import { IPayload } from '../Services/TokenServices'
+
+tinkoff.get('/getInfo', async(req:Request, res:Response<any,GetInfoResponse>) => {
+	const tApi = getApi()  
+	res.send(await tApi.users.getInfo(req.body).response)
 })

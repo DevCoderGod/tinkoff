@@ -6,3 +6,4 @@ export const aTokenSecret = 'aTokenSecret'
 export const rTokenSecret = 'rTokenSecret'
 export const aTokenExpired = 'PT5000M' //ISO 8601 5 minutes
 export const rTokenExpired = 'PT10000M' //ISO 8601 5 days
+export const tServer = 'invest-public-api.tinkoff.ru:443'
