@@ -5,6 +5,7 @@ import { dirname, join } from 'path'
 import * as VARS from './globalVars.js'
 import { Router } from './Router/index.js'
 import cookieParser from 'cookie-parser'
+import { authMiddleware } from './middlewares/authMiddleware.js'
 
 const app = express()
 const __filename = fileURLToPath(import.meta.url)
@@ -18,6 +19,7 @@ if(VARS.isPROD) app.use(express.static(join(__dirname, '../../client_react/build
 
 app.use('/', Router.home)
 app.use('/auth', Router.auth)
+app.use('/tinkoff',authMiddleware, Router.tinkoff)
 app.use('*', (req, res) => {
 	res.status(404).json({ message: 'Page not found' })
 })
