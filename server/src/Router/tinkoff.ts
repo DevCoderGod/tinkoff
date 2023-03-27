@@ -34,3 +34,13 @@ tinkoff.post('/connect', async (request:Request<{},any,{token: IToken["value"] |
 		console.log('exit exitCode === ',exitCode)
 	}	
 })
+
+//test local token
+import { getApi } from '../tApi/tApi.js'
+import { GetInfoResponse } from "@tinkoff/users"
+import { IPayload } from '../Services/TokenServices'
+
+tinkoff.get('/getInfo', async(req:Request, res:Response<any,GetInfoResponse>) => {
+	const tApi = getApi()  
+	res.send(await tApi.users.getInfo(req.body).response)
+})
