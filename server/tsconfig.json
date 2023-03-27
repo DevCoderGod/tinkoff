@@ -14,7 +14,8 @@
 		"paths": {
 			"@models": ["../shared/models/Models"],
 			"@api": ["../shared/api/Api"],
-			"@proto/*": ["../shared/tsproto/*"]
+			"@proto/*": ["../shared/tsproto/*"],
+			"@tinkoff/*": ["../shared/types/tsproto/*"],
 		}
 	},
 	"include": ["src/**/*", "tests/**/*"],
