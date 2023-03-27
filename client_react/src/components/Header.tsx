@@ -1,3 +1,5 @@
+import { Store } from "../Store"
+import { observer } from "mobx-react-lite"
 import { ButtonLogout } from "./ButtonLogout"
 import { MainMenu } from "./MainMenu"
 
@@ -5,7 +7,7 @@ interface IProps {
 	title:string
 }
 
-export const Header = (props:IProps) => {
+export const Header = observer(function Header(props:IProps){
 	return(
 		<header style={{
 			"display":"flex",
@@ -14,7 +16,7 @@ export const Header = (props:IProps) => {
 		}}>
 			<h1>{props.title}</h1>
 			<MainMenu/>
-			<ButtonLogout/>
+			{Store.app.isAuth && <ButtonLogout/>}
 		</header>
 	)
-}
+})

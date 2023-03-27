@@ -1,6 +1,6 @@
 interface IProps {
 	children:string
-	onClick: ()=>{}
+	onClick: ()=>void
 }
 
 export const Button = (props:IProps) => {

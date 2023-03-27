@@ -10,7 +10,7 @@ export class CAppStore{
 			isTerminal:observable,
 			setIsAuth:action,
         })
-		this.isAuth = false
+		this.isAuth = localStorage.getItem("token") ? true : false
 		this.isTerminal = false
 	}
 

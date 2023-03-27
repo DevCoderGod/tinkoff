@@ -7,5 +7,5 @@ export const ButtonLogout = () => {
 		await Store.user.logout()
 	}
 	
-	return Store.app.isAuth ? <Button onClick={logout} children= "Выход"/> : <></>
+	return <Button onClick={logout} children= "Выход"/>
 }

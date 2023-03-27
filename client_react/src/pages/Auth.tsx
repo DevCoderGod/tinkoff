@@ -9,12 +9,8 @@ export const Auth = () => {
 
 	const [statusLogin, setstatusLogin] = useState(true)
 
-	useEffect(()=>{
-		if(!statusLogin) {
-			alert("Login filed")
-			setstatusLogin(true)
-			console.log(' "Login filed" ')
-		}
+	useEffect(()=> {
+		statusLogin && setstatusLogin(true)
 	},[statusLogin])
 	
 

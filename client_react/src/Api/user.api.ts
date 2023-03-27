@@ -1,18 +1,17 @@
-import { TAuth } from "@api"
-import { IUser } from "@models"
-import { fetchJSON } from "./requests"
+import { TAuth } from '@api'
+import { fetchWithRToken } from "./requests"
 import { server } from "../globalVars"
 
 class CUserApi {
 
-	login = async (userData:TAuth.LoginRequest):Promise<IUser | null> => {
-		if(!userData) return null
-		
-		return await fetchJSON<TAuth.LoginRequest,IUser>(`${server}auth/login`, "POST", userData)
+	login = async (userData:TAuth.LoginRequest):Promise<TAuth.LoginResponse> => {
+		return await fetchWithRToken<TAuth.LoginRequest, TAuth.LoginResponse>(`${server}auth/login`, "POST", userData)
+			.catch(err => {throw new Error(`CUserApi.login is fail. err: ${err}`)})
 	}
 
-	logout = async():Promise<boolean|null> => {
-		return await fetchJSON<TAuth.LoginRequest,boolean>(`${server}auth/logout`, "POST")
+	logout = async():Promise<boolean> => {
+		return await fetchWithRToken<TAuth.LoginRequest, boolean>(`${server}auth/logout`, "POST")
+			.catch(err => {throw new Error(`CUserApi.logout is fail. err: ${err}`)})
 	}
 }
 
