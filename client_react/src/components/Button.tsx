@@ -1,8 +1,14 @@
 interface IProps {
 	children:string
 	onClick: ()=>void
+	disabled?: boolean
 }
 
 export const Button = (props:IProps) => {
-	return <button onClick={props.onClick}>{props.children}</button>
+	return <button 
+		disabled = {props.disabled}
+		onClick = {props.onClick}
+	>
+		{props.children}
+	</button>
 }
