@@ -11,8 +11,8 @@ wsServer.on('connection', ws => {
 	ws.on('message', async message => {
 		if(message.toString() === "exit") process.exit(2)
 	})
-	ws.on("error", e => ws.send(`ws error == ${e}`))
-	ws.on("close", e => ws.send(`ws close == ${e}`))
+	ws.on("error", err => {console.log('err === ',err); process.exit(4)})
+	ws.on("close", e =>  process.exit(5))
 })
 
 parentPort.addListener("message", m => {
