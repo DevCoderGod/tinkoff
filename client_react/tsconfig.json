@@ -30,7 +30,7 @@
 	  "@helpers/*": ["./src/helpers/*"],
 	  "@models": ["../shared/models/Models"],
 	  "@api": ["../shared/api/Api"],
-	  "@proto/*": ["../shared/tsproto/*"],
+	  "@tinkoff/*": ["../shared/types/tsproto/*"],
 
 	  "@store": [
 		"src/Store"
