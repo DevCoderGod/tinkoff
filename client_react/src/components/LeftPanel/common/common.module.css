@@ -1,0 +1,8 @@
+.formElement {
+	padding: 2px 5px;
+	margin-bottom: 5px;
+	border-radius: 5px;
+	border: 0;
+	background: transparent !important;
+	background-color: transparent !important;
+}

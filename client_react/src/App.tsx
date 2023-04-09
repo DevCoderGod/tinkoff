@@ -1,21 +1,14 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { observer } from "mobx-react-lite"
-import { Store } from "src/Store"
+import { Store } from "./Store"
 import { Home } from "./pages/Home"
-import { Auth } from "./pages/Auth"
 import { Terminal } from "./pages/Terminal"
 import { TradeSpace } from "./pages/TradeSpace"
 
-export const App = observer(function App(){
+import { LeftPanel } from "./components/LeftPanel/LeftPanel"
+
+const Router = observer(function Router () {
 	if(Store.app.isAuth){
-		if(Store.app.isTerminal){
-			return(
-				<Routes>
-					<Route path= "/" element={<Home/>} />
-					<Route path= "/*" element={<Navigate to="/" replace />} />
-				</Routes>
-			)
-		} else {
 			return(
 				<Routes>
 					<Route path= "/" element={<Home/>} />
@@ -25,13 +18,21 @@ export const App = observer(function App(){
 				</Routes>
 			)	
 		}
-	}
 	return(
 		<Routes>
 			<Route path= "/" element={<Home/>} />
-			<Route path= "/auth" element={<Auth/>} />
 			<Route path= "/*" element={<Navigate to="/" replace />} />
 		</Routes>
+	)
+
+})
+
+export const App = observer(function App() {
+	return(
+		<>
+			<LeftPanel/>
+			<Router/>
+		</>
 	)
 })
 

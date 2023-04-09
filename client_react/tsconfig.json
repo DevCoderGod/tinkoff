@@ -33,7 +33,7 @@
 	  "@tinkoff/*": ["../shared/types/tsproto/*"],
 
 	  "@store": [
-		"src/Store"
+		"./src/Store/index.js"
 	  ]
 	},
   },

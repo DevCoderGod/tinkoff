@@ -41,6 +41,7 @@ export class CUserStore{
 			if(!userData) throw new Error('bud userData') //TODO валидация
 			const data = await Api.user.login(userData)
 			console.log('data === ',data)
+			if(!data.user) return false
 			this.setToken(data.token)
 			this.setUser(data.user)
 			app.setIsAuth(true)

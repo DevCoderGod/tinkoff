@@ -1,0 +1,4 @@
+.button {
+	composes: formElement from "../common.module.css";
+	box-shadow:  1px 1px 2px black, -1px -1px 2px;
+}

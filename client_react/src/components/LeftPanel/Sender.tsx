@@ -1,6 +1,6 @@
-import { Store } from "../Store"
+import { Store } from "../../Store"
 import { useRef } from "react"
-import { Button } from "./Button"
+import { Button } from "./common/Button/Button"
 
 export const Sender = () => {
 	const refMess = useRef<HTMLInputElement>(null)
@@ -17,7 +17,10 @@ export const Sender = () => {
 				id="mess"
 				type="text"
 			/>
-			<Button onClick={sendMessage} children= "Send"/>
+			<Button
+				onClick={sendMessage}
+				inscription={"sendMessage"}
+			/>
 		</div>
 	)
 }

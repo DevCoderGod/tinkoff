@@ -40,7 +40,7 @@ export class CTAccount{
 		else alert("Soket is not open")
 	}
 
-	async close(){
+	async disconnect(){
 		await this.ws?.close(3001,"work end")
 		this.setWs(null)
 	}
