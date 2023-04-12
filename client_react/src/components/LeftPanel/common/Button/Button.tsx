@@ -1,4 +1,4 @@
-import S from './Button.module.css'
+import S from './Button.module.scss'
 
 interface IProps {
 	inscription: string
@@ -9,7 +9,7 @@ interface IProps {
 export const Button = (props:IProps) => {
 	return (
 		<button
-			className= {S.button} 
+			className= {S.button}
 			disabled = {props.disabled}
 			onClick = {props.onClick}
 		>

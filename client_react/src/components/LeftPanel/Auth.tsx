@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import S from './LeftPanel.module.css'
+import S from './LeftPanel.module.scss'
 import { observer } from 'mobx-react-lite'
 import { Store } from "src/Store"
 import { Button } from "./common/Button/Button"

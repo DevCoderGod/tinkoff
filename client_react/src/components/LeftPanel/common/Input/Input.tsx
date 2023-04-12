@@ -1,4 +1,4 @@
-import S from './Input.module.css'
+import S from './Input.module.scss'
 
 interface IProps {
 	id: string

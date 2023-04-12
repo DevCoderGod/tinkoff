@@ -1,4 +1,4 @@
-import S from './Title.module.css'
+import S from './Title.module.scss'
 
 export const Title = (props:{children:any}) => {
 	return (

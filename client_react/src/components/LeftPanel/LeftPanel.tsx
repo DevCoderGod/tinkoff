@@ -1,4 +1,4 @@
-import S from './LeftPanel.module.css'
+import S from './LeftPanel.module.scss'
 import cn from "classnames"
 import { observer } from "mobx-react-lite"
 import { Store } from "../../Store"
@@ -9,7 +9,7 @@ import { Switch } from "./Switch"
 
 export const LeftPanel = observer(function LeftPanel(){
 	return(
-		<div className= {cn(S.panel, Store.app.isOpenLeftPanel ? S.open : S.closed)}>
+		<div className= {cn(S.panel, Store.app.isOpenLeftPanel ? S.panel_open : S.panel_closed)}>
 			<div className={S.panel__title}><Switch/></div>
 			<Auth/>
 			{Store.app.isAuth && <Connector/>}
