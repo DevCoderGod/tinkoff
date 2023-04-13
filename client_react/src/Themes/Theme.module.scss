@@ -1,0 +1,5 @@
+.theme-transition {
+	transition:
+		background-color var(--change-theme-duration) linear,
+		color var(--change-theme-duration) linear;
+}

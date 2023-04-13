@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom"
+import S from './App.module.scss'
 import { observer } from "mobx-react-lite"
 import { Store } from "./Store"
 import { Home } from "./pages/Home"
@@ -29,10 +30,10 @@ const Router = observer(function Router () {
 
 export const App = observer(function App() {
 	return(
-		<>
+		<div className={S.app}>
 			<LeftPanel/>
 			<Router/>
-		</>
+		</div>
 	)
 })
 

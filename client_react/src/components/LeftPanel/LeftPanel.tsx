@@ -6,11 +6,12 @@ import { Store } from "../../Store"
 import { Auth } from "./Auth";
 import { Connector } from "./Connector"
 import { Switch } from "./Switch"
+import { ThemeSwitch } from './ThemeSwitch';
 
 export const LeftPanel = observer(function LeftPanel(){
 	return(
 		<div className= {cn(S.panel, Store.app.isOpenLeftPanel ? S.panel_open : S.panel_closed)}>
-			<div className={S.panel__title}><Switch/></div>
+			<div className={S.panel__title}><ThemeSwitch/><Switch/></div>
 			<Auth/>
 			{Store.app.isAuth && <Connector/>}
 		</div>
