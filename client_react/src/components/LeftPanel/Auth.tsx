@@ -25,28 +25,32 @@ export const Auth = observer(function Auth(){
 	}
 
 	async function logout(){
+		await Store.tAccount.disconnect()
 		await Store.user.logout()
 	}
 
 	return(
 		<div className={S.container}>
 			<Title>Авторизация</Title>
-			<form action="">
-				<Input
-					id="name"
-					label="Имя"
-					type="text"
-					refInput={refNam}
-					disabled = {Store.app.isAuth}
-				/>
-				<Input
-					id="password"
-					label="Пароль"
-					type="password"
-					refInput={refPas}
-					disabled = {Store.app.isAuth}
-				/>
-			</form>
+			{Store.app.isAuth
+				? <div>Пользователь: {localStorage.getItem("user")}</div>
+				: <form action="">
+					<Input
+						id="name"
+						label="Имя"
+						type="text"
+						refInput={refNam}
+						disabled = {Store.app.isAuth}
+					/>
+					<Input
+						id="password"
+						label="Пароль"
+						type="password"
+						refInput={refPas}
+						disabled = {Store.app.isAuth}
+					/>
+				</form>
+			}
 			<Button
 				onClick={Store.app.isAuth? logout : login}
 				inscription={Store.app.isAuth? "Выход" : "Вход"}
