@@ -52,25 +52,32 @@
 	&__switch{
 		width: 20px;
 		height: 20px;
-		border: solid 1px #000;
+		border: solid 1px var(--text-color);
 		border-radius: 50%;
 		overflow: hidden;
 
 		position: relative;
 		transform: translateX(30px) rotate(0deg);
-		transition: transform var(--left-panel-left-duration);
+		transition: 
+			transform var(--left-panel-left-duration),
+			border var(--change-theme-duration) linear
+		;
 
 		&::after{
 			content: '';
 			width: 0px;
 			height: 0px;
 			border: solid 7px transparent;
-			border-left: solid 7px black;
+			border-left: solid 7px var(--text-color);
 
 			position: absolute;
 			top: 50%;
 			left: 50%;
 			transform: translate(-17%, -50%);
+			transition: 
+				border var(--change-theme-duration) linear
+			;
+
 		}
 		&_open {
 			transform: rotate(180deg);
