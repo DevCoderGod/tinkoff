@@ -1,0 +1,120 @@
+.container{
+	border-radius: 15px;
+	padding: 0 0 10px;
+
+	display: flex;
+	flex-direction: column;
+
+	& > * {
+		margin-bottom: 10px;
+	}
+}
+
+.panel{
+	composes: container;
+	position: absolute;
+	top: 1%;
+	bottom: 1%;
+
+	width: 300px;
+	padding: 0 10px;
+	
+	display: flex;
+	flex-direction: column;
+
+	font-weight: bolder;
+	background-color: var(--left-panel-background-color);
+
+	// composes: theme-transition from "../../Themes/Theme.module.scss"; //отменяет transition: left
+	transition:
+		background-color var(--change-theme-duration) linear,
+		left var(--left-panel-left-duration) linear
+	;
+	
+	&_open {
+		left: 2px;
+	}
+
+	&_closed {
+		left: -304px;
+	}
+	
+	&__title {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		padding: 10px 0 0;
+		& > * {
+			margin-left: 10px;
+		}
+	}
+
+	&__switch{
+		width: 20px;
+		height: 20px;
+		border: solid 1px var(--text-color);
+		border-radius: 50%;
+		overflow: hidden;
+
+		position: relative;
+		transform: translateX(30px) rotate(0deg);
+		transition: 
+			transform var(--left-panel-left-duration),
+			border var(--change-theme-duration) linear
+		;
+
+		&::after{
+			content: '';
+			width: 0px;
+			height: 0px;
+			border: solid 7px transparent;
+			border-left: solid 7px var(--text-color);
+
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-17%, -50%);
+			transition: 
+				border var(--change-theme-duration) linear
+			;
+
+		}
+		&_open {
+			transform: rotate(180deg);
+		}
+	}
+
+	&__themeSwitch {
+		width: 20px;
+		height: 20px;
+		border: solid 1px var(--text-color);
+		border-radius: 50%;
+		overflow: hidden;
+		position: relative;
+		background-color: var(--background-color);
+		transform: rotate(0deg);
+		transition:
+			border var(--change-theme-duration) linear,
+			background-color var(--change-theme-duration) linear,
+			transform var(--change-theme-duration) linear
+		;
+
+		&::after{
+			content: '';
+			width: 0px;
+			height: 0px;
+			border-top: solid 10px var(--text-color);
+			border-right: solid 9px var(--text-color);
+			border-bottom: solid 10px var(--text-color);
+			transition:
+				border-top var(--change-theme-duration) linear,
+				border-right var(--change-theme-duration) linear,
+				border-bottom var(--change-theme-duration) linear,
+			;
+			position: absolute;
+		}
+		&_dark {
+			transform: rotate(180deg);
+		}
+	}
+}

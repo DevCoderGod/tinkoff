@@ -1,0 +1,35 @@
+// @import "../common.scss";
+
+.container {
+	display: flex;
+	justify-content: space-between;
+	background-color: transparent;
+}
+
+.input {
+	composes: formElement from "../_common.module.scss";
+	// @extend %formElement;
+	outline:none;
+	width: 50%;
+	box-shadow: inset 1px 1px 2px black,inset -1px -1px 2px black;
+}
+
+.input:focus {
+	background: transparent !important;
+	background-color: transparent !important;
+	color: var(--left-panel-text-color) !important;
+}
+
+.input:-webkit-autofill{
+	background: transparent !important;
+	background-color: transparent !important;
+	color: var(--left-panel-text-color) !important;
+	-webkit-text-fill-color: var(--left-panel-text-color) !important;
+	transition:
+		background-color 100000s ease-in-out,
+		-webkit-text-fill-color var(--change-theme-duration) ease-in-out !important
+	;
+	/* костыль для хрома https://www.kobzarev.com/external/aHR0cHM6Ly9jb2RlLmdvb2dsZS5jb20vcC9jaHJvbWl1bS9pc3N1ZXMvZGV0YWlsP2lkPTEzMzQ= */
+	// если надо изменяемое свойство transition мешает.
+	// Проще сделать кастомный инпут из div`а
+}

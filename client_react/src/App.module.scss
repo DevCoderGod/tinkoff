@@ -1,0 +1,7 @@
+.app {
+	height: 100vh;
+
+	color: var(--text-color);
+	background-color: var(--background-color);
+	composes: theme-transition from "./Themes/Theme.module.scss";
+}
