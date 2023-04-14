@@ -1,17 +1,16 @@
-import S from './LeftPanel.module.scss'
+import S from '../LeftPanel.module.scss'
 import cn from "classnames"
-import { observer } from 'mobx-react-lite'
-import { Store } from "../../Store"
 
-export const Switch = observer(function Switch() {
+interface IProps {
+	className:string
+	onClick:()=>void
+}
 
-	function click():void {
-		Store.app.setIsOpenLeftPanel(!Store.app.isOpenLeftPanel)
-	}
-
+export const Switch = (props:IProps) => {
 	return(
-		<div className= {cn(S.panel__switch, Store.app.isOpenLeftPanel ? S["panel__switch_open"] : "")}
-			onClick = {click}
+		<div
+			className= {props.className}
+			onClick = {props.onClick}
 		/>
 	)
-})
+}
