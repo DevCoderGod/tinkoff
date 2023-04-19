@@ -9,6 +9,8 @@ import type { GetClosePricesResponse } from "./marketdata";
 import type { GetClosePricesRequest } from "./marketdata";
 import type { GetLastTradesResponse } from "./marketdata";
 import type { GetLastTradesRequest } from "./marketdata";
+import type { GetTradingStatusesResponse } from "./marketdata";
+import type { GetTradingStatusesRequest } from "./marketdata";
 import type { GetTradingStatusResponse } from "./marketdata";
 import type { GetTradingStatusRequest } from "./marketdata";
 import type { GetOrderBookResponse } from "./marketdata";
@@ -49,6 +51,12 @@ export interface IMarketDataServiceClient {
      * @generated from protobuf rpc: GetTradingStatus(tinkoff.public.invest.api.contract.v1.GetTradingStatusRequest) returns (tinkoff.public.invest.api.contract.v1.GetTradingStatusResponse);
      */
     getTradingStatus(input: GetTradingStatusRequest, options?: RpcOptions): UnaryCall<GetTradingStatusRequest, GetTradingStatusResponse>;
+    /**
+     * Метод запроса статуса торгов по инструментам.
+     *
+     * @generated from protobuf rpc: GetTradingStatuses(tinkoff.public.invest.api.contract.v1.GetTradingStatusesRequest) returns (tinkoff.public.invest.api.contract.v1.GetTradingStatusesResponse);
+     */
+    getTradingStatuses(input: GetTradingStatusesRequest, options?: RpcOptions): UnaryCall<GetTradingStatusesRequest, GetTradingStatusesResponse>;
     /**
      * Метод запроса обезличенных сделок за последний час.
      *
@@ -99,6 +107,12 @@ export declare class MarketDataServiceClient implements IMarketDataServiceClient
      * @generated from protobuf rpc: GetTradingStatus(tinkoff.public.invest.api.contract.v1.GetTradingStatusRequest) returns (tinkoff.public.invest.api.contract.v1.GetTradingStatusResponse);
      */
     getTradingStatus(input: GetTradingStatusRequest, options?: RpcOptions): UnaryCall<GetTradingStatusRequest, GetTradingStatusResponse>;
+    /**
+     * Метод запроса статуса торгов по инструментам.
+     *
+     * @generated from protobuf rpc: GetTradingStatuses(tinkoff.public.invest.api.contract.v1.GetTradingStatusesRequest) returns (tinkoff.public.invest.api.contract.v1.GetTradingStatusesResponse);
+     */
+    getTradingStatuses(input: GetTradingStatusesRequest, options?: RpcOptions): UnaryCall<GetTradingStatusesRequest, GetTradingStatusesResponse>;
     /**
      * Метод запроса обезличенных сделок за последний час.
      *

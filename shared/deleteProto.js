@@ -8,7 +8,7 @@ const files = [
 	'tsconfig.tsbuildinfo',
 	'/types',
 	'/tsproto',
-	'/investAPI-main',
+	'/investAPI-1.3',
 ]
 
 console.log(' Удаление proto файлов ... ')

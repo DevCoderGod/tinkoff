@@ -21,7 +21,7 @@ export interface PostStopOrderRequest {
     /**
      * @generated from protobuf field: int64 quantity = 2;
      */
-    quantity: bigint;
+    quantity: string;
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.Quotation price = 3;
      */
@@ -127,7 +127,7 @@ export interface StopOrder {
     /**
      * @generated from protobuf field: int64 lots_requested = 2;
      */
-    lotsRequested: bigint;
+    lotsRequested: string;
     /**
      * @generated from protobuf field: string figi = 3;
      */

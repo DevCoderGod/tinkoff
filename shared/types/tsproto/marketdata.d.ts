@@ -535,7 +535,7 @@ export interface Candle {
     /**
      * @generated from protobuf field: int64 volume = 7;
      */
-    volume: bigint;
+    volume: string;
     /**
      * @generated from protobuf field: google.protobuf.Timestamp time = 8;
      */
@@ -605,7 +605,7 @@ export interface Order {
     /**
      * @generated from protobuf field: int64 quantity = 2;
      */
-    quantity: bigint;
+    quantity: string;
 }
 /**
  * Информация о сделке.
@@ -628,7 +628,7 @@ export interface Trade {
     /**
      * @generated from protobuf field: int64 quantity = 4;
      */
-    quantity: bigint;
+    quantity: string;
     /**
      * @generated from protobuf field: google.protobuf.Timestamp time = 5;
      */
@@ -732,7 +732,7 @@ export interface HistoricCandle {
     /**
      * @generated from protobuf field: int64 volume = 5;
      */
-    volume: bigint;
+    volume: string;
     /**
      * @generated from protobuf field: google.protobuf.Timestamp time = 6;
      */
@@ -879,6 +879,28 @@ export interface GetTradingStatusRequest {
      * @generated from protobuf field: string instrument_id = 2;
      */
     instrumentId: string;
+}
+/**
+ * Запрос получения торгового статуса.
+ *
+ * @generated from protobuf message tinkoff.public.invest.api.contract.v1.GetTradingStatusesRequest
+ */
+export interface GetTradingStatusesRequest {
+    /**
+     * @generated from protobuf field: repeated string instrument_id = 1;
+     */
+    instrumentId: string[];
+}
+/**
+ * Информация о торговом статусе.
+ *
+ * @generated from protobuf message tinkoff.public.invest.api.contract.v1.GetTradingStatusesResponse
+ */
+export interface GetTradingStatusesResponse {
+    /**
+     * @generated from protobuf field: repeated tinkoff.public.invest.api.contract.v1.GetTradingStatusResponse trading_statuses = 1;
+     */
+    tradingStatuses: GetTradingStatusResponse[];
 }
 /**
  * Информация о торговом статусе.
@@ -1185,7 +1207,55 @@ export declare enum CandleInterval {
      *
      * @generated from protobuf enum value: CANDLE_INTERVAL_DAY = 5;
      */
-    CANDLE_INTERVAL_DAY = 5
+    CANDLE_INTERVAL_DAY = 5,
+    /**
+     * 2 минуты.
+     *
+     * @generated from protobuf enum value: CANDLE_INTERVAL_2_MIN = 6;
+     */
+    CANDLE_INTERVAL_2_MIN = 6,
+    /**
+     * 3 минуты.
+     *
+     * @generated from protobuf enum value: CANDLE_INTERVAL_3_MIN = 7;
+     */
+    CANDLE_INTERVAL_3_MIN = 7,
+    /**
+     * 10 минут.
+     *
+     * @generated from protobuf enum value: CANDLE_INTERVAL_10_MIN = 8;
+     */
+    CANDLE_INTERVAL_10_MIN = 8,
+    /**
+     * 30 минут.
+     *
+     * @generated from protobuf enum value: CANDLE_INTERVAL_30_MIN = 9;
+     */
+    CANDLE_INTERVAL_30_MIN = 9,
+    /**
+     * 2 часа.
+     *
+     * @generated from protobuf enum value: CANDLE_INTERVAL_2_HOUR = 10;
+     */
+    CANDLE_INTERVAL_2_HOUR = 10,
+    /**
+     * 4 часа.
+     *
+     * @generated from protobuf enum value: CANDLE_INTERVAL_4_HOUR = 11;
+     */
+    CANDLE_INTERVAL_4_HOUR = 11,
+    /**
+     * 1 неделя.
+     *
+     * @generated from protobuf enum value: CANDLE_INTERVAL_WEEK = 12;
+     */
+    CANDLE_INTERVAL_WEEK = 12,
+    /**
+     * 1 месяц.
+     *
+     * @generated from protobuf enum value: CANDLE_INTERVAL_MONTH = 13;
+     */
+    CANDLE_INTERVAL_MONTH = 13
 }
 declare class MarketDataRequest$Type extends MessageType<MarketDataRequest> {
     constructor();
@@ -1557,6 +1627,26 @@ declare class GetTradingStatusRequest$Type extends MessageType<GetTradingStatusR
  * @generated MessageType for protobuf message tinkoff.public.invest.api.contract.v1.GetTradingStatusRequest
  */
 export declare const GetTradingStatusRequest: GetTradingStatusRequest$Type;
+declare class GetTradingStatusesRequest$Type extends MessageType<GetTradingStatusesRequest> {
+    constructor();
+    create(value?: PartialMessage<GetTradingStatusesRequest>): GetTradingStatusesRequest;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetTradingStatusesRequest): GetTradingStatusesRequest;
+    internalBinaryWrite(message: GetTradingStatusesRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter;
+}
+/**
+ * @generated MessageType for protobuf message tinkoff.public.invest.api.contract.v1.GetTradingStatusesRequest
+ */
+export declare const GetTradingStatusesRequest: GetTradingStatusesRequest$Type;
+declare class GetTradingStatusesResponse$Type extends MessageType<GetTradingStatusesResponse> {
+    constructor();
+    create(value?: PartialMessage<GetTradingStatusesResponse>): GetTradingStatusesResponse;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetTradingStatusesResponse): GetTradingStatusesResponse;
+    internalBinaryWrite(message: GetTradingStatusesResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter;
+}
+/**
+ * @generated MessageType for protobuf message tinkoff.public.invest.api.contract.v1.GetTradingStatusesResponse
+ */
+export declare const GetTradingStatusesResponse: GetTradingStatusesResponse$Type;
 declare class GetTradingStatusResponse$Type extends MessageType<GetTradingStatusResponse> {
     constructor();
     create(value?: PartialMessage<GetTradingStatusResponse>): GetTradingStatusResponse;

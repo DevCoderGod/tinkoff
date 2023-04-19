@@ -97,7 +97,7 @@ export interface OrderTrade {
     /**
      * @generated from protobuf field: int64 quantity = 3;
      */
-    quantity: bigint;
+    quantity: string;
     /**
      * @generated from protobuf field: string trade_id = 4;
      */
@@ -116,7 +116,7 @@ export interface PostOrderRequest {
     /**
      * @generated from protobuf field: int64 quantity = 2;
      */
-    quantity: bigint;
+    quantity: string;
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.Quotation price = 3;
      */
@@ -159,11 +159,11 @@ export interface PostOrderResponse {
     /**
      * @generated from protobuf field: int64 lots_requested = 3;
      */
-    lotsRequested: bigint;
+    lotsRequested: string;
     /**
      * @generated from protobuf field: int64 lots_executed = 4;
      */
-    lotsExecuted: bigint;
+    lotsExecuted: string;
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue initial_order_price = 5;
      */
@@ -297,11 +297,11 @@ export interface OrderState {
     /**
      * @generated from protobuf field: int64 lots_requested = 3;
      */
-    lotsRequested: bigint;
+    lotsRequested: string;
     /**
      * @generated from protobuf field: int64 lots_executed = 4;
      */
-    lotsExecuted: bigint;
+    lotsExecuted: string;
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue initial_order_price = 5;
      */
@@ -376,7 +376,7 @@ export interface OrderStage {
     /**
      * @generated from protobuf field: int64 quantity = 2;
      */
-    quantity: bigint;
+    quantity: string;
     /**
      * @generated from protobuf field: string trade_id = 3;
      */
@@ -403,7 +403,7 @@ export interface ReplaceOrderRequest {
     /**
      * @generated from protobuf field: int64 quantity = 11;
      */
-    quantity: bigint;
+    quantity: string;
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.Quotation price = 12;
      */

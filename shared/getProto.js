@@ -9,7 +9,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const arch=join(__dirname, 'proto.zip')
 const file = createWriteStream(arch)
-const url = 'https://codeload.github.com/Tinkoff/investAPI/zip/refs/tags/v1.1'
+const url = 'https://codeload.github.com/Tinkoff/investAPI/zip/refs/tags/v1.3'
 
 
 file.on('close',async ()=>{
