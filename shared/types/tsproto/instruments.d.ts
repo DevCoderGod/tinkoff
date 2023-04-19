@@ -5,6 +5,7 @@ import type { BinaryReadOptions } from "@protobuf-ts/runtime";
 import type { IBinaryReader } from "@protobuf-ts/runtime";
 import type { PartialMessage } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
+import { InstrumentType } from "./common";
 import { Quotation } from "./common";
 import { SecurityTradingStatus } from "./common";
 import { MoneyValue } from "./common";
@@ -112,6 +113,14 @@ export interface TradingDay {
      * @generated from protobuf field: google.protobuf.Timestamp premarket_end_time = 15;
      */
     premarketEndTime?: Timestamp;
+    /**
+     * @generated from protobuf field: google.protobuf.Timestamp closing_auction_start_time = 16;
+     */
+    closingAuctionStartTime?: Timestamp;
+    /**
+     * @generated from protobuf field: google.protobuf.Timestamp opening_auction_end_time = 17;
+     */
+    openingAuctionEndTime?: Timestamp;
 }
 /**
  * Запрос получения инструмента по идентификатору.
@@ -212,7 +221,7 @@ export interface Coupon {
     /**
      * @generated from protobuf field: int64 coupon_number = 3;
      */
-    couponNumber: bigint;
+    couponNumber: string;
     /**
      * @generated from protobuf field: google.protobuf.Timestamp fix_date = 4;
      */
@@ -648,11 +657,11 @@ export interface Bond {
     /**
      * @generated from protobuf field: int64 issue_size = 29;
      */
-    issueSize: bigint;
+    issueSize: string;
     /**
      * @generated from protobuf field: int64 issue_size_plan = 30;
      */
-    issueSizePlan: bigint;
+    issueSizePlan: string;
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.SecurityTradingStatus trading_status = 31;
      */
@@ -718,6 +727,10 @@ export interface Bond {
      */
     blockedTcaFlag: boolean;
     /**
+     * @generated from protobuf field: bool subordinated_flag = 55;
+     */
+    subordinatedFlag: boolean;
+    /**
      * @generated from protobuf field: google.protobuf.Timestamp first_1min_candle_date = 61 [json_name = "first1minCandleDate"];
      */
     first1MinCandleDate?: Timestamp;
@@ -725,6 +738,10 @@ export interface Bond {
      * @generated from protobuf field: google.protobuf.Timestamp first_1day_candle_date = 62 [json_name = "first1dayCandleDate"];
      */
     first1DayCandleDate?: Timestamp;
+    /**
+     * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.RiskLevel risk_level = 63;
+     */
+    riskLevel: RiskLevel;
 }
 /**
  * Объект передачи информации о валюте.
@@ -1268,7 +1285,7 @@ export interface Share {
     /**
      * @generated from protobuf field: int64 issue_size = 18;
      */
-    issueSize: bigint;
+    issueSize: string;
     /**
      * @generated from protobuf field: string country_of_risk = 19;
      */
@@ -1284,7 +1301,7 @@ export interface Share {
     /**
      * @generated from protobuf field: int64 issue_size_plan = 22;
      */
-    issueSizePlan: bigint;
+    issueSizePlan: string;
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue nominal = 23;
      */
@@ -1587,6 +1604,10 @@ export interface Instrument {
      */
     blockedTcaFlag: boolean;
     /**
+     * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.InstrumentType instrument_kind = 40;
+     */
+    instrumentKind: InstrumentType;
+    /**
      * @generated from protobuf field: google.protobuf.Timestamp first_1min_candle_date = 56 [json_name = "first1minCandleDate"];
      */
     first1MinCandleDate?: Timestamp;
@@ -1847,6 +1868,10 @@ export interface AssetSecurity {
      * @generated from protobuf field: string type = 2;
      */
     type: string;
+    /**
+     * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.InstrumentType instrument_kind = 10;
+     */
+    instrumentKind: InstrumentType;
     /**
      * @generated from protobuf oneof: ext
      */
@@ -2316,6 +2341,10 @@ export interface AssetInstrument {
      * @generated from protobuf field: repeated tinkoff.public.invest.api.contract.v1.InstrumentLink links = 6;
      */
     links: InstrumentLink[];
+    /**
+     * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.InstrumentType instrument_kind = 10;
+     */
+    instrumentKind: InstrumentType;
 }
 /**
  * Связь с другим инструментом.
@@ -2384,6 +2413,10 @@ export interface FavoriteInstrument {
      * @generated from protobuf field: bool api_trade_available_flag = 17;
      */
     apiTradeAvailableFlag: boolean;
+    /**
+     * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.InstrumentType instrument_kind = 18;
+     */
+    instrumentKind: InstrumentType;
 }
 /**
  * Запрос редактирования списка избранных инструментов.
@@ -2523,6 +2556,10 @@ export interface InstrumentShort {
      * @generated from protobuf field: string position_uid = 8;
      */
     positionUid: string;
+    /**
+     * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.InstrumentType instrument_kind = 10;
+     */
+    instrumentKind: InstrumentType;
     /**
      * @generated from protobuf field: bool api_trade_available_flag = 11;
      */
@@ -2976,6 +3013,35 @@ export declare enum RealExchange {
      * @generated from protobuf enum value: REAL_EXCHANGE_OTC = 3;
      */
     OTC = 3
+}
+/**
+ * Уровень риска облигации.
+ *
+ * @generated from protobuf enum tinkoff.public.invest.api.contract.v1.RiskLevel
+ */
+export declare enum RiskLevel {
+    /**
+     * @generated from protobuf enum value: RISK_LEVEL_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * Низкий уровень риска
+     *
+     * @generated from protobuf enum value: RISK_LEVEL_LOW = 1;
+     */
+    LOW = 1,
+    /**
+     * Средний уровень риска
+     *
+     * @generated from protobuf enum value: RISK_LEVEL_MODERATE = 2;
+     */
+    MODERATE = 2,
+    /**
+     * Высокий уровень риска
+     *
+     * @generated from protobuf enum value: RISK_LEVEL_HIGH = 3;
+     */
+    HIGH = 3
 }
 declare class TradingSchedulesRequest$Type extends MessageType<TradingSchedulesRequest> {
     constructor();
