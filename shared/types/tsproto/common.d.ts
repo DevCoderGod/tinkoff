@@ -22,7 +22,7 @@ export interface MoneyValue {
      *
      * @generated from protobuf field: int64 units = 2;
      */
-    units: bigint;
+    units: string;
     /**
      * дробная часть суммы, может быть отрицательным числом
      *
@@ -41,7 +41,7 @@ export interface Quotation {
      *
      * @generated from protobuf field: int64 units = 1;
      */
-    units: bigint;
+    units: string;
     /**
      * дробная часть суммы, может быть отрицательным числом
      *
@@ -61,6 +61,65 @@ export interface Ping {
      * @generated from protobuf field: google.protobuf.Timestamp time = 1;
      */
     time?: Timestamp;
+}
+/**
+ * Тип инструмента.
+ *
+ * @generated from protobuf enum tinkoff.public.invest.api.contract.v1.InstrumentType
+ */
+export declare enum InstrumentType {
+    /**
+     * @generated from protobuf enum value: INSTRUMENT_TYPE_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * Облигация.
+     *
+     * @generated from protobuf enum value: INSTRUMENT_TYPE_BOND = 1;
+     */
+    BOND = 1,
+    /**
+     * Акция.
+     *
+     * @generated from protobuf enum value: INSTRUMENT_TYPE_SHARE = 2;
+     */
+    SHARE = 2,
+    /**
+     * Валюта.
+     *
+     * @generated from protobuf enum value: INSTRUMENT_TYPE_CURRENCY = 3;
+     */
+    CURRENCY = 3,
+    /**
+     * Exchange-traded fund. Фонд.
+     *
+     * @generated from protobuf enum value: INSTRUMENT_TYPE_ETF = 4;
+     */
+    ETF = 4,
+    /**
+     * Фьючерс.
+     *
+     * @generated from protobuf enum value: INSTRUMENT_TYPE_FUTURES = 5;
+     */
+    FUTURES = 5,
+    /**
+     * Структурная нота.
+     *
+     * @generated from protobuf enum value: INSTRUMENT_TYPE_SP = 6;
+     */
+    SP = 6,
+    /**
+     * Опцион.
+     *
+     * @generated from protobuf enum value: INSTRUMENT_TYPE_OPTION = 7;
+     */
+    OPTION = 7,
+    /**
+     * Clearing certificate.
+     *
+     * @generated from protobuf enum value: INSTRUMENT_TYPE_CLEARING_CERTIFICATE = 8;
+     */
+    CLEARING_CERTIFICATE = 8
 }
 /**
  * Режим торгов инструмента
