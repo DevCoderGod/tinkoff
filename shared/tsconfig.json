@@ -7,5 +7,8 @@
     	"declarationDir": "./types",
 		"emitDeclarationOnly": true,
 		"strictNullChecks": true
-	}
+	},
+	"exclude": [
+		"**/*.d.ts"
+    ]
 }
