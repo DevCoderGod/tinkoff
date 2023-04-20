@@ -1,7 +1,7 @@
-import { TServiceName, TService, TServiceMethod, TServiceData }  from "../tApi/tApi"
+import { TService }  from "../tApi/TApi"
 
 export interface IMessage {
 	service: TService
-	proc: TServiceMethod<TService>
-	data: TServiceData<TServiceName>
+	proc: string
+	data: object
 }
