@@ -1,6 +1,7 @@
 import { makeObservable, observable, action } from 'mobx'
 import { fetchJSON } from "../Api/requests"
 import { server } from "../globalVars"
+import { IMessage } from '@api'
 
 export class CTAccount{
 	ws: WebSocket | null
@@ -23,9 +24,12 @@ export class CTAccount{
 			const port = await fetchJSON<{token:string}, {port:string}>(`${server}tinkoff/connect`, "POST",{token})
 			if(!port) throw new Error(`the server did not provide a port`)
 			const ws = new WebSocket(`ws://localhost:${port.port}`)
+	
 			ws.onopen = function() {
-				ws.onmessage = function(e){
-					console.log('e === ',e)
+				ws.onmessage = function(e: MessageEvent<IMessage>){
+					console.log('e === ', e.data)
+
+
 				}
 			}
 			this.setWs(ws)
@@ -35,8 +39,8 @@ export class CTAccount{
 
 	}
 
-	async sendMessage(message:string){
-		if(this.ws) this.ws.send(message)
+	async sendMessage(message:IMessage){
+		if(this.ws) this.ws.send(JSON.stringify(message))
 		else alert("Soket is not open")
 	}
 
