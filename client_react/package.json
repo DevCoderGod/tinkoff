@@ -22,7 +22,16 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+	"commonCompileProto": "npx protoc --ts_out .\\src\\tApi --ts_opt long_type_string --proto_path ..\\shared\\investAPI-1.1\\src\\docs\\contracts ..\\shared\\investAPI-1.1\\src\\docs\\contracts\\common.proto",
+	"instrumentsCompileProto": "npx protoc --ts_out .\\src\\tApi --ts_opt long_type_string --proto_path ..\\shared\\investAPI-1.1\\src\\docs\\contracts ..\\shared\\investAPI-1.1\\src\\docs\\contracts\\instruments.proto",
+    "marketdataCompileProto": "npx protoc --ts_out .\\src\\tApi --ts_opt long_type_string --proto_path ..\\shared\\investAPI-1.1\\src\\docs\\contracts ..\\shared\\investAPI-1.1\\src\\docs\\contracts\\marketdata.proto",
+    "operationsCompileProto": "npx protoc --ts_out .\\src\\tApi --ts_opt long_type_string --proto_path ..\\shared\\investAPI-1.1\\src\\docs\\contracts ..\\shared\\investAPI-1.1\\src\\docs\\contracts\\operations.proto",
+    "ordersCompileProto": "npx protoc --ts_out .\\src\\tApi --ts_opt long_type_string --proto_path ..\\shared\\investAPI-1.1\\src\\docs\\contracts ..\\shared\\investAPI-1.1\\src\\docs\\contracts\\orders.proto",
+    "stopordersCompileProto": "npx protoc --ts_out .\\src\\tApi --ts_opt long_type_string --proto_path ..\\shared\\investAPI-1.1\\src\\docs\\contracts ..\\shared\\investAPI-1.1\\src\\docs\\contracts\\stoporders.proto",
+    "usersCompileProto": "npx protoc --ts_out .\\src\\tApi --ts_opt long_type_string --proto_path ..\\shared\\investAPI-1.1\\src\\docs\\contracts ..\\shared\\investAPI-1.1\\src\\docs\\contracts\\users.proto",
+    "sandboxCompileProto": "npx protoc --ts_out .\\src\\tApi --ts_opt long_type_string --proto_path ..\\shared\\investAPI-1.1\\src\\docs\\contracts ..\\shared\\investAPI-1.1\\src\\docs\\contracts\\sandbox.proto",
+	"compileProto": "npm run commonCompileProto && npm run instrumentsCompileProto & npm run marketdataCompileProto & npm run operationsCompileProto & npm run ordersCompileProto & npm run stopordersCompileProto & npm run usersCompileProto && npm run sandboxCompileProto"
   },
   "eslintConfig": {
     "extends": [
@@ -44,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@protobuf-ts/plugin": "^2.8.2",
     "classnames": "^2.3.2",
     "sass": "^1.62.0"
   }
