@@ -15,7 +15,7 @@ function patch(){
 		files.forEach(file => {
 			let content = fs.readFileSync(file, 'utf-8')
 
-			content = content.split('\n').map(s => s.replace(/^(import .+? from ["']\..+?)(["'];)$/, '$1.js$2')).join('\n')
+			content = content.split('\n').map(s => s.replace(/^(import .+? from ["']\..+?)(["'];)/, '$1.js$2')).join('\n')
 
 			fs.writeFileSync(file, content, 'utf-8')
 			console.log(`${file} is patched`)
