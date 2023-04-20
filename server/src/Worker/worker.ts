@@ -13,9 +13,9 @@ const server = http.createServer()
 const wsServer = new WebSocketServer({ server })
 
 wsServer.on('connection', async ws => {
-	ws.on('message', async message => {
+	ws.on('message', async (message) => {
 		if(message.toString() === "exit") process.exit(2)
-		MainHandler(ws,tApi,message.toString())
+		MainHandler(ws,tApi,message)
 	})
 	ws.on("error", err => {console.log('err === ',err); process.exit(4)})
 	ws.on("close", e =>  process.exit(5))

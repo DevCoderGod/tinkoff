@@ -5,6 +5,7 @@ import type { BinaryReadOptions } from "@protobuf-ts/runtime";
 import type { IBinaryReader } from "@protobuf-ts/runtime";
 import type { PartialMessage } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
+import { InstrumentType } from "./common";
 import { Ping } from "./common";
 import { Quotation } from "./common";
 import { MoneyValue } from "./common";
@@ -80,11 +81,11 @@ export interface Operation {
     /**
      * @generated from protobuf field: int64 quantity = 7;
      */
-    quantity: bigint;
+    quantity: string;
     /**
      * @generated from protobuf field: int64 quantity_rest = 8;
      */
-    quantityRest: bigint;
+    quantityRest: string;
     /**
      * @generated from protobuf field: string figi = 9;
      */
@@ -113,6 +114,14 @@ export interface Operation {
      * @generated from protobuf field: string asset_uid = 16;
      */
     assetUid: string;
+    /**
+     * @generated from protobuf field: string position_uid = 17;
+     */
+    positionUid: string;
+    /**
+     * @generated from protobuf field: string instrument_uid = 18;
+     */
+    instrumentUid: string;
 }
 /**
  * Сделка по операции.
@@ -131,7 +140,7 @@ export interface OperationTrade {
     /**
      * @generated from protobuf field: int64 quantity = 3;
      */
-    quantity: bigint;
+    quantity: string;
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue price = 4;
      */
@@ -353,6 +362,10 @@ export interface PortfolioPosition {
      */
     blocked: boolean;
     /**
+     * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.Quotation blocked_lots = 22;
+     */
+    blockedLots?: Quotation;
+    /**
      * @generated from protobuf field: string position_uid = 24;
      */
     positionUid: string;
@@ -431,11 +444,11 @@ export interface PositionsSecurities {
     /**
      * @generated from protobuf field: int64 blocked = 2;
      */
-    blocked: bigint;
+    blocked: string;
     /**
      * @generated from protobuf field: int64 balance = 3;
      */
-    balance: bigint;
+    balance: string;
     /**
      * @generated from protobuf field: string position_uid = 4;
      */
@@ -466,11 +479,11 @@ export interface PositionsFutures {
     /**
      * @generated from protobuf field: int64 blocked = 2;
      */
-    blocked: bigint;
+    blocked: string;
     /**
      * @generated from protobuf field: int64 balance = 3;
      */
-    balance: bigint;
+    balance: string;
     /**
      * @generated from protobuf field: string position_uid = 4;
      */
@@ -497,11 +510,11 @@ export interface PositionsOptions {
     /**
      * @generated from protobuf field: int64 blocked = 11;
      */
-    blocked: bigint;
+    blocked: string;
     /**
      * @generated from protobuf field: int64 balance = 21;
      */
-    balance: bigint;
+    balance: string;
 }
 /**
  * @generated from protobuf message tinkoff.public.invest.api.contract.v1.BrokerReportRequest
@@ -660,7 +673,7 @@ export interface BrokerReport {
     /**
      * @generated from protobuf field: int64 quantity = 12;
      */
-    quantity: bigint;
+    quantity: string;
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue order_amount = 13;
      */
@@ -863,7 +876,7 @@ export interface DividendsForeignIssuerReport {
     /**
      * @generated from protobuf field: int64 quantity = 6;
      */
-    quantity: bigint;
+    quantity: string;
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.Quotation dividend = 7;
      */
@@ -1086,6 +1099,10 @@ export interface OperationItem {
      */
     instrumentKind: InstrumentType;
     /**
+     * @generated from protobuf field: string position_uid = 35;
+     */
+    positionUid: string;
+    /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue payment = 41;
      */
     payment?: MoneyValue;
@@ -1112,15 +1129,15 @@ export interface OperationItem {
     /**
      * @generated from protobuf field: int64 quantity = 51;
      */
-    quantity: bigint;
+    quantity: string;
     /**
      * @generated from protobuf field: int64 quantity_rest = 52;
      */
-    quantityRest: bigint;
+    quantityRest: string;
     /**
      * @generated from protobuf field: int64 quantity_done = 53;
      */
-    quantityDone: bigint;
+    quantityDone: string;
     /**
      * @generated from protobuf field: google.protobuf.Timestamp cancel_date_time = 56;
      */
@@ -1166,7 +1183,7 @@ export interface OperationItemTrade {
     /**
      * @generated from protobuf field: int64 quantity = 11;
      */
-    quantity: bigint;
+    quantity: string;
     /**
      * @generated from protobuf field: tinkoff.public.invest.api.contract.v1.MoneyValue price = 16;
      */
@@ -1734,59 +1751,6 @@ export declare enum PortfolioSubscriptionStatus {
      * @generated from protobuf enum value: PORTFOLIO_SUBSCRIPTION_STATUS_INTERNAL_ERROR = 3;
      */
     INTERNAL_ERROR = 3
-}
-/**
- * Тип инструмента.
- *
- * @generated from protobuf enum tinkoff.public.invest.api.contract.v1.InstrumentType
- */
-export declare enum InstrumentType {
-    /**
-     * @generated from protobuf enum value: INSTRUMENT_TYPE_UNSPECIFIED = 0;
-     */
-    UNSPECIFIED = 0,
-    /**
-     * Облигация.
-     *
-     * @generated from protobuf enum value: INSTRUMENT_TYPE_BOND = 1;
-     */
-    BOND = 1,
-    /**
-     * Акция.
-     *
-     * @generated from protobuf enum value: INSTRUMENT_TYPE_SHARE = 2;
-     */
-    SHARE = 2,
-    /**
-     * Валюта.
-     *
-     * @generated from protobuf enum value: INSTRUMENT_TYPE_CURRENCY = 3;
-     */
-    CURRENCY = 3,
-    /**
-     * Exchange-traded fund. Фонд.
-     *
-     * @generated from protobuf enum value: INSTRUMENT_TYPE_ETF = 4;
-     */
-    ETF = 4,
-    /**
-     * Фьючерс.
-     *
-     * @generated from protobuf enum value: INSTRUMENT_TYPE_FUTURES = 5;
-     */
-    FUTURES = 5,
-    /**
-     * Структурная нота.
-     *
-     * @generated from protobuf enum value: INSTRUMENT_TYPE_SP = 6;
-     */
-    SP = 6,
-    /**
-     * Опцион.
-     *
-     * @generated from protobuf enum value: INSTRUMENT_TYPE_OPTION = 7;
-     */
-    OPTION = 7
 }
 /**
  * Результат подписки.

@@ -58,7 +58,6 @@ import { MessageType } from "@protobuf-ts/runtime";
  *     Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
  *         .setNanos((int) ((millis % 1000) * 1000000)).build();
  *
- *
  * Example 5: Compute Timestamp from Java `Instant.now()`.
  *
  *     Instant now = Instant.now();
@@ -66,7 +65,6 @@ import { MessageType } from "@protobuf-ts/runtime";
  *     Timestamp timestamp =
  *         Timestamp.newBuilder().setSeconds(now.getEpochSecond())
  *             .setNanos(now.getNano()).build();
- *
  *
  * Example 6: Compute Timestamp from current time in Python.
  *
@@ -101,7 +99,6 @@ import { MessageType } from "@protobuf-ts/runtime";
  * ) to obtain a formatter capable of generating timestamps in this format.
  *
  *
- *
  * @generated from protobuf message google.protobuf.Timestamp
  */
 export interface Timestamp {
@@ -112,7 +109,7 @@ export interface Timestamp {
      *
      * @generated from protobuf field: int64 seconds = 1;
      */
-    seconds: bigint;
+    seconds: string;
     /**
      * Non-negative fractions of a second at nanosecond resolution. Negative
      * second values with fractions must still have non-negative nanos values

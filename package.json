@@ -5,7 +5,7 @@
   "description": "",
   "scripts": {
     "getProto": "npm run getProto --prefix shared",
-	"getGRPC": "npm run getGRPC --prefix server",
+    "getGRPC": "npm run getGRPC --prefix server",
     "dev:server": "npm run start --prefix server",
     "prod:server": "npm run prod --prefix server",
     "dev:client_react": "npm run start --prefix client_react",
@@ -15,6 +15,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@protobuf-ts/grpc-transport": "^2.8.3",
     "adm-zip": "^0.5.9",
     "concurrently": "^7.4.0"
   },

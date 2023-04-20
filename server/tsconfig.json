@@ -14,6 +14,7 @@
 		"paths": {
 			"@models": ["../shared/models/Models"],
 			"@api": ["../shared/api/Api"],
+			"@tApi": ["../shared/tApi/tApi"],
 			"@proto/*": ["../shared/tsproto/*"],
 			"@tinkoff/*": ["../shared/types/tsproto/*"],
 		}
