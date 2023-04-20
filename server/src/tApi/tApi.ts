@@ -3,6 +3,8 @@ import { GrpcTransport } from "@protobuf-ts/grpc-transport"
 import { tServer } from '../globalVars.js'
 
 // TODO reference to shared
+// https://stackoverflow.com/questions/44114436/the-create-react-app-imports-restriction-outside-of-src-directory
+
 import { InstrumentsServiceClient } from './grpc/instruments.client.js'
 import { MarketDataServiceClient, MarketDataStreamServiceClient } from './grpc/marketdata.client.js'
 import { OperationsServiceClient, OperationsStreamServiceClient } from './grpc/operations.client.js'

@@ -37,12 +37,3 @@ tinkoff.post('/connect', async (request:Request<{},any,{token: IToken["value"] |
 		console.log('exit exitCode === ',exitCode)
 	}	
 })
-
-//test local token, directly to GRPC 
-import { getApi } from '../tApi/tApi.js'
-import { GetInfoResponse } from "@tinkoff/users"
-
-tinkoff.get('/getInfo', async(req:Request, res:Response<any,GetInfoResponse>) => {
-	const tApi = getApi()  
-	res.send(await tApi.users.getInfo(req.body).response)
-})
