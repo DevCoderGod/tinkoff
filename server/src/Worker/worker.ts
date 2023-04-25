@@ -20,9 +20,9 @@ wsServer.on('connection', async ws => {
 	ws.on("error", err => {console.log('err === ',err); process.exit(4)})
 	ws.on("close", e =>  process.exit(5))
 
-	const userInfo:GetInfoResponse = await tApi.users.getInfo({}).response
-	if(!userInfo) throw new Error(' bad tApi')
-	ws.send(JSON.stringify(userInfo))
+	// const userInfo:GetInfoResponse = await tApi.users.getInfo({}).response
+	// if(!userInfo) throw new Error(' bad tApi')
+	// ws.send(JSON.stringify(userInfo))
 })
 
 parentPort.addListener("message", m => {

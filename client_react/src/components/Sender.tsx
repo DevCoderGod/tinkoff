@@ -13,6 +13,7 @@ import { IMessage } from '@api'
 // TODO https://stackoverflow.com/questions/44114436/the-create-react-app-imports-restriction-outside-of-src-directory
 
 const m:IMessage = {
+	requestId: Store.tAccount.getRequestId,
 	service: "users",
 	proc:"getUserTariff",
 	data:{}
@@ -57,7 +58,7 @@ const m:IMessage = {
 
 export const Sender = () => {
 
-	console.log('m.data === ',m.data)
+	// console.log('m.data === ',m.data)
 
 	const refMess = useRef<HTMLInputElement>(null)
 

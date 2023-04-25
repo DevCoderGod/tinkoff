@@ -6,25 +6,36 @@ import * as SandboxService from '../types/tsproto/sandbox'
 import * as StopOrdersService from '../types/tsproto/stoporders'
 import * as UsersService from '../types/tsproto/users'
 
-import { InstrumentsServiceClient } from '../types/tsproto/instruments.client'
-import { MarketDataServiceClient, MarketDataStreamServiceClient } from '../types/tsproto/marketdata.client.js'
-import { OperationsServiceClient, OperationsStreamServiceClient } from '../types/tsproto/operations.client.js'
-import { OrdersServiceClient, OrdersStreamServiceClient } from '../types/tsproto/orders.client.js'
-import { SandboxServiceClient } from '../types/tsproto/sandbox.client.js'
-import { StopOrdersServiceClient } from '../types/tsproto/stoporders.client.js'
-import { UsersServiceClient } from "../types/tsproto/users.client.js"
+import { IInstrumentsServiceClient } from '../types/tsproto/instruments.client'
+import { IMarketDataServiceClient, IMarketDataStreamServiceClient } from '../types/tsproto/marketdata.client.js'
+import { IOperationsServiceClient, IOperationsStreamServiceClient } from '../types/tsproto/operations.client.js'
+import { IOrdersServiceClient, IOrdersStreamServiceClient } from '../types/tsproto/orders.client.js'
+import { ISandboxServiceClient } from '../types/tsproto/sandbox.client.js'
+import { IStopOrdersServiceClient } from '../types/tsproto/stoporders.client.js'
+import { IUsersServiceClient } from "../types/tsproto/users.client.js"
 
-export interface ITApi {
-	instruments: typeof InstrumentsService
-	marketdata: typeof MarketDataService
-	operations: typeof OperationsService
-	orders: typeof OrdersService
-	sandbox: typeof SandboxService
-	stoporders: typeof StopOrdersService
-	users: typeof UsersService
+interface TApi {
+	instruments: keyof IInstrumentsServiceClient
+	marketdata: keyof IMarketDataServiceClient
+	marketDataStream: keyof IMarketDataStreamServiceClient
+	operations: keyof IOperationsServiceClient
+	operationsStream: keyof IOperationsStreamServiceClient
+	orders: keyof IOrdersServiceClient
+	ordersStream: keyof IOrdersStreamServiceClient
+	sandbox: keyof ISandboxServiceClient
+	stopOrders: keyof IStopOrdersServiceClient
+	users: keyof IUsersServiceClient
 }
 
-export type TService = keyof ITApi
+//OK
+export type TService = keyof TApi
+export type ITApi = {
+	[service in TService]:{
+		[m in TApi[service]]:(any)=>any
+	}
+}
+
+
 
 // export type TServiceName = keyof ITApi
 // // export type TServiceData = ITApi[keyof TServiceName]

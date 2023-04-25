@@ -8,7 +8,13 @@ export const MainHandler = async(ws:WebSocket, tApi:CTApi, message:any) => {
 	const req:IMessage = JSON.parse(message) //TODO try catch
 
 	// @ts-ignore
-	let response = await tApi[req.service][req.proc](req.data).response // TODO typing
+	const data = await tApi[req.service][req.proc](req.data).response // TODO typing
+	const response:IMessage = {
+		requestId: req.requestId,
+		service:req.service,
+		proc:req.proc,
+		data
+	}
 
 	// if(req.service === "users"){
 	// 	const service = tApi["users"]
@@ -16,6 +22,6 @@ export const MainHandler = async(ws:WebSocket, tApi:CTApi, message:any) => {
 	// 	if(typeof method === "function")response = await method.bind(service)(req.data).response
 	// }
 
-	console.log('response === ',response)
+	// console.log('response === ',response)
 	ws.send(JSON.stringify(response))
 }
