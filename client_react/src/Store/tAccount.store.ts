@@ -49,13 +49,6 @@ export class CTAccount{
 		ws.send(JSON.stringify(message))
 	}
 
-	main(e: MessageEvent<string>){
-		const data:IMessage = JSON.parse(e.data)
-		if(this.responses[data.requestId]){
-			this.responses[data.requestId](data.data)
-			delete this.responses[data.requestId]
-		}
-	}
 
 	setRequestId(id:number){
 		this.requestId = id
@@ -85,12 +78,34 @@ export class CTAccount{
 
 	}
 
-	async sendMessage(message:IMessage, cb:((data:any)=>void) | null = null){
+	
+	main(e: MessageEvent<string>){
+		const data:IMessage = JSON.parse(e.data)
+		if(this.responses[data.requestId]){
+			this.responses[data.requestId](data.data)
+			delete this.responses[data.requestId]
+		}
+	}
+
+	async sendMessage(message:IMessage): Promise<IMessage["data"] | void>{
+		let result
 		if(this.ws) {
-			if (message.requestId && cb) this.responses[message.requestId]=cb //Object.defineProperty this.responses
-			this.ws.send(JSON.stringify(message))
+			if (message.requestId) {
+				result = new Promise<IMessage["data"]>((resolve,reject)=>{
+					const timeout = setTimeout(() => reject("Timeout exceeded"),5000)
+					const response = (data:IMessage["data"]) => {
+						globalThis.clearTimeout(timeout)
+						resolve(data)
+					}
+					this.responses[message.requestId]=response
+					this.ws!.send(JSON.stringify(message))
+				})
+			}
+			else this.ws.send(JSON.stringify(message))
 		}
 		else alert("Soket is not open")
+		console.log('result === ',result)
+		return result
 	}
 
 	async disconnect(){

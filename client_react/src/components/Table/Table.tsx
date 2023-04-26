@@ -3,7 +3,8 @@ import S from './Table.module.scss'
 import cn from "classnames"
 import { OperationsRequest, OperationsResponse, Operation } from "@tinkoff/operations"
 
-export function Table(props:{ops:Operation[]}) {
+export function Table(props:{ops:any[]}) {
+	console.log(' table ')
 	return (
 		<table>
 			<tbody>

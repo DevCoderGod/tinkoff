@@ -6,23 +6,23 @@ import { Timestamp } from "@tinkoff/google/protobuf/timestamp"
 // type TOperationsServices = keyof IOperationsServiceClient
 type TOperationsServices = keyof IOperationsServiceClient
 
-export const Operations:{[key in TOperationsServices]:(data:any,cb:(data:any)=>void)=>void} = {
-	getOperations: (data:OperationsRequest, cb:(data:OperationsResponse)=>void) => {
-		Store.tAccount.sendMessage(
+export const Operations:{[key in TOperationsServices]:(data:any)=>any} = {
+	getOperations: async (data:OperationsRequest):Promise<OperationsResponse> => {
+		return await Store.tAccount.sendMessage(
 			{
 				requestId: Store.tAccount.getRequestId,
 				service: "operations",
 				proc: "getOperations",
 				data: data
-			},cb
-		)
+			}
+		) as Promise<OperationsResponse>
 	},
 
-	getPortfolio: (data: any, cb: (data: any) => void) => {throw new Error(`Function not implemented.`)},
-    getPositions: (data: any, cb: (data: any) => void) => {throw new Error(`Function not implemented.`)},
-    getWithdrawLimits: (data: any, cb: (data: any) => void) => {throw new Error(`Function not implemented.`)},
-    getBrokerReport: (data: any, cb: (data: any) => void) => {throw new Error(`Function not implemented.`)},
-    getDividendsForeignIssuer: (data: any, cb: (data: any) => void) => {throw new Error(`Function not implemented.`)},
-    getOperationsByCursor: (data: any, cb: (data: any) => void) => {throw new Error(`Function not implemented.`)},
+	getPortfolio: (data: any,) => {throw new Error(`Function not implemented.`)},
+    getPositions: (data: any,) => {throw new Error(`Function not implemented.`)},
+    getWithdrawLimits: (data: any,) => {throw new Error(`Function not implemented.`)},
+    getBrokerReport: (data: any,) => {throw new Error(`Function not implemented.`)},
+    getDividendsForeignIssuer: (data: any,) => {throw new Error(`Function not implemented.`)},
+    getOperationsByCursor: (data: any,) => {throw new Error(`Function not implemented.`)},
 }
 

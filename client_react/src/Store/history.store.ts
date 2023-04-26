@@ -24,13 +24,11 @@ export class CHistoryStore{
 		tApi.Operations.getOperations(
 			{
 				accountId:tAccount.account.id,
-				// accountId: "2187116252",
 				from: Timestamp.fromDate(new Date("2023-04-23Z")),
 				to: Timestamp.fromDate(new Date("2023-04-25Z")),
 				state: 0,
 				figi:""
-			},
-			(data:OperationsResponse) => this.setOperations(data.operations)//console.log('data === ',data)
+			}
 		)
 	}
 
