@@ -3,7 +3,7 @@ import cn from "classnames"
 import { observer } from "mobx-react-lite"
 import { Store } from "../../Store"
 
-import { Auth } from "./Auth";
+import { Auth } from "./Auth"
 import { Connector } from "./Connector"
 import { Switch } from "./Switch"
 

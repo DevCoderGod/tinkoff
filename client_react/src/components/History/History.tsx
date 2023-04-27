@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import S from './History.module.scss'
 import { Store } from '../../Store'
-import { Table } from '../Table/Table';
+import { Table } from '../Table/Table'
 import { observer } from "mobx-react-lite"
 import { Timestamp } from '../../tsproto/google/protobuf/timestamp'
-import { Operation } from '../../../../shared/tsproto/operations';
+import { Operation } from '../../../../shared/tsproto/operations'
 import { tApi } from '../../tApi'
-import { InstrumentIdType, Share, ShareResponse } from '../../tsproto/instruments';
+import { InstrumentIdType, Share, ShareResponse } from '../../tsproto/instruments'
 import { OperationsRequest, OperationsResponse } from "@tinkoff/operations"
 
 interface LocOps{
@@ -85,5 +85,5 @@ export const History = observer(function History() {
 				ops={historyLocal}
 			/>}
 		</div>
-	);
+	)
 })
