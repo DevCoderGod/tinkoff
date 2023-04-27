@@ -1,19 +1,20 @@
 import { WebSocket } from 'ws'
 import { CTApi } from '../tApi/tApi.js'
-import { IMessage } from '@api'
+import { IWSMessage, IWSMessageData } from '@api'
 
-
-
-export const MainHandler = async(ws:WebSocket, tApi:CTApi, message:any) => {
-	const req:IMessage = JSON.parse(message) //TODO try catch
+export const MainHandler = async(ws:WebSocket, tApi:CTApi, message:string) => {
+	const request:IWSMessage = JSON.parse(message) //TODO try catch
+	request.data
 
 	// @ts-ignore
-	const data = await tApi[req.service][req.proc](req.data).response // TODO typing
-	const response:IMessage = {
-		requestId: req.requestId,
-		service:req.service,
-		proc:req.proc,
-		data
+	const payload:IWSMessageData<any> = await tApi[request.data.service][request.data.method](request.data.payload).response // TODO typing
+	const response:IWSMessage = {
+		id: request.id,
+		data: {
+			service:request.data.service,
+			method:request.data.method,
+			payload
+		}
 	}
 
 	// if(req.service === "users"){

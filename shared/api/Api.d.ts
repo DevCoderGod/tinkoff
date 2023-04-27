@@ -1,7 +1,8 @@
 import * as TAuth from "./Auth"
-import { IMessage } from "./Message"
+import { IWSMessage, IWSMessageData } from "./WSMessage"
 
 export {
 	TAuth,
-	IMessage
+	IWSMessage,
+	IWSMessageData
 }

@@ -1,8 +1,8 @@
-import { makeObservable, observable, action, computed } from 'mobx'
+import { makeObservable, observable, action } from 'mobx'
+import { server, wsTimeot } from "../globalVars"
 import { fetchJSON } from "../Api/requests"
-import { server } from "../globalVars"
-import { IMessage } from '@api'
-import { Account, GetAccountsResponse } from '@tinkoff/users'
+import { IWSMessageData, IWSMessage } from '@api'
+import { Account, GetAccountsRequest, GetAccountsResponse } from '@tinkoff/users'
 
 interface IResponces{
 	[key:number]:(data:any)=>void
@@ -10,11 +10,11 @@ interface IResponces{
 
 export class CTAccount{
 	ws: WebSocket | null
-	account: Account
-	requestId: number
+	wsMessageId: number
 	responses:IResponces
+	account: Account
 
-	constructor() {
+	constructor(){
         makeObservable(this, {
             ws: observable,
             account: observable,
@@ -23,7 +23,7 @@ export class CTAccount{
         })
 		this.ws = null
 		this.account = {} as Account
-		this.requestId = 0
+		this.wsMessageId = 0
 		this.responses = {}
 	}
 
@@ -39,48 +39,40 @@ export class CTAccount{
 		this.account = a
 	}
 
-	getAccountData(ws: WebSocket){
-		const requestId = this.getRequestId
-		const message:IMessage = {
-			requestId,
-		    service:"users",
-		    proc: "getAccounts",
-		    data: {}
-		}
-		this.responses[message.requestId] = (data:GetAccountsResponse) => {
-			this.setAccount(data.accounts[0])
-		}
-		ws.send(JSON.stringify(message))
+	async getAccountData(ws: WebSocket){
+		this.setAccount(await this.likeFetch<GetAccountsRequest, GetAccountsResponse>({
+			service:"users",
+			method: "getAccounts",
+			payload: {}
+		}).then(p => p.accounts[0]))
 	}
-
-
 	
 	main(e: MessageEvent<string>){
-		const data:IMessage = JSON.parse(e.data)
-		if(this.responses[data.requestId]){
-			this.responses[data.requestId](data.data)
-			delete this.responses[data.requestId]
-		}
+		const message:IWSMessage = JSON.parse(e.data)
+		if(this.responses[message.id]){
+			this.responses[message.id](message.data.payload)
+			delete this.responses[message.id]
+		} else console.log('unknown message from ws: ',message)
 	}
 
-	async sendMessage(message:IMessage): Promise<IMessage["data"] | void>{
-		let result
-		if(this.ws) {
-			if (message.requestId) {
-				result = new Promise<IMessage["data"]>((resolve,reject)=>{
-					const timeout = setTimeout(() => reject("Timeout exceeded"),5000)
-					const response = (data:IMessage["data"]) => {
-						globalThis.clearTimeout(timeout)
-						resolve(data)
-					}
-					this.responses[message.requestId]=response
-					this.ws!.send(JSON.stringify(message))
-				})
+	async likeFetch<REQ,RES>(data:IWSMessageData<REQ>): Promise<RES>{
+		return new Promise<RES>((resolve,reject) => {
+			const timeout = setTimeout(() => reject("Timeout exceeded"),wsTimeot)
+			const response = (data:RES) => {
+				globalThis.clearTimeout(timeout)
+				resolve(data)
 			}
-			else this.ws.send(JSON.stringify(message))
-		}
-		else alert("Soket is not open")
-		return result
+			const request:IWSMessage = {
+				id: this.getMessageId,
+				data
+			}
+			this.responses[request.id]=response
+			this.ws!.send(JSON.stringify(request))
+		})
+	}
+
+	sendMessage<REQ>(data:IWSMessageData<REQ>):void{
+		this.ws!.send(JSON.stringify({data}))
 	}
 
 	async connect(token:string):Promise<any>{
@@ -93,18 +85,16 @@ export class CTAccount{
 		} catch (err) {
 			console.log('connect error: ',err)
 		}
-
 	}
-	
+
 	async disconnect(){
 		await this.ws?.close(3001,"work end")
 		this.setWs(null)
 	}
 
-	get getRequestId() {
-		return Number.isSafeInteger(this.requestId++) ? this.requestId : 1
+	get getMessageId() {
+		return Number.isSafeInteger(this.wsMessageId++) ? this.wsMessageId : 1
 	}
-
 }
 
 export const tAccount = new CTAccount()
