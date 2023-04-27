@@ -10,20 +10,20 @@ interface IResponces{
 
 export class CTAccount{
 	ws: WebSocket | null
-	account: Account = {} as Account
+	account: Account
 	requestId: number
 	responses:IResponces
-	// instruments:
 
 	constructor() {
         makeObservable(this, {
             ws: observable,
+            account: observable,
 			setWs: action,
 			setAccount: action,
-			getRequestId: computed
         })
 		this.ws = null
-		this.requestId = 1
+		this.account = {} as Account
+		this.requestId = 0
 		this.responses = {}
 	}
 
@@ -33,6 +33,10 @@ export class CTAccount{
 			ws.onopen = (e) => this.getAccountData(ws)
 		}
 		this.ws = ws
+	}
+
+	setAccount(a:Account){
+		this.account = a
 	}
 
 	getAccountData(ws: WebSocket){
@@ -49,34 +53,6 @@ export class CTAccount{
 		ws.send(JSON.stringify(message))
 	}
 
-
-	setRequestId(id:number){
-		this.requestId = id
-	}
-
-	setAccount(a:Account){
-		this.account = a
-	}
-
-	get getRequestId() {
-		let id = this.requestId
-		if(!Number.isSafeInteger(id++))id = 1
-		this.setRequestId(id)
-		return id
-	}
-
-	async connect(token:string):Promise<any>{
-		if(!token) return false
-		try {
-			const port = await fetchJSON<{token:string}, {port:string}>(`${server}tinkoff/connect`, "POST",{token})
-			if(!port) throw new Error(`the server did not provide a port`)
-			const ws = new WebSocket(`ws://localhost:${port.port}`)
-			this.setWs(ws)
-		} catch (err) {
-			console.log('connect error: ',err)
-		}
-
-	}
 
 	
 	main(e: MessageEvent<string>){
@@ -104,14 +80,31 @@ export class CTAccount{
 			else this.ws.send(JSON.stringify(message))
 		}
 		else alert("Soket is not open")
-		console.log('result === ',result)
 		return result
 	}
 
+	async connect(token:string):Promise<any>{
+		if(!token) return false
+		try {
+			const port = await fetchJSON<{token:string}, {port:string}>(`${server}tinkoff/connect`, "POST",{token})
+			if(!port) throw new Error(`the server did not provide a port`)
+			const ws = new WebSocket(`ws://localhost:${port.port}`)
+			this.setWs(ws)
+		} catch (err) {
+			console.log('connect error: ',err)
+		}
+
+	}
+	
 	async disconnect(){
 		await this.ws?.close(3001,"work end")
 		this.setWs(null)
 	}
+
+	get getRequestId() {
+		return Number.isSafeInteger(this.requestId++) ? this.requestId : 1
+	}
+
 }
 
 export const tAccount = new CTAccount()

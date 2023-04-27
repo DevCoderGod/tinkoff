@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import S from './History.module.scss'
-import { Sender } from '../../components/Sender'
 import { Store } from '../../Store'
 import { Table } from '../Table/Table';
 import { observer } from "mobx-react-lite"
@@ -57,7 +56,6 @@ export const History = observer(function History() {
 			classCode:"",
 			id: i
 		}).then(shareData => shareData.instrument?.ticker ?? "no Ticker")
-		console.log('ticker === ',ticker)
 		return ticker
 	}
 
