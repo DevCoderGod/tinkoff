@@ -2,10 +2,20 @@ import { makeObservable, observable, action } from 'mobx'
 import { server, wsTimeot } from "../globalVars"
 import { fetchJSON } from "../Api/requests"
 import { IWSMessageData, IWSMessage } from '@api'
-import { Account, GetAccountsRequest, GetAccountsResponse } from '@tinkoff/users'
+import { tApi } from '../tApi'
+import { Account } from '@tinkoff/users'
+import { Future, Share } from '@tinkoff/instruments'
+import { InstrumentStatus } from '../tsproto/instruments'
 
 interface IResponces{
 	[key:number]:(data:any)=>void
+}
+
+interface IInfo{
+	instruments:{
+		shares: Share[]
+		futures: Future[]
+	}
 }
 
 export class CTAccount{
@@ -13,6 +23,7 @@ export class CTAccount{
 	wsMessageId: number
 	responses:IResponces
 	account: Account
+	info: IInfo
 
 	constructor(){
         makeObservable(this, {
@@ -23,6 +34,7 @@ export class CTAccount{
         })
 		this.ws = null
 		this.account = {} as Account
+		this.info = {instruments:{}} as IInfo
 		this.wsMessageId = 0
 		this.responses = {}
 	}
@@ -30,7 +42,10 @@ export class CTAccount{
 	setWs(ws:WebSocket | null){
 		if(ws){
 			ws.onmessage = (e) => this.main(e)
-			ws.onopen = (e) => this.getAccountData(ws)
+			ws.onopen = async (e) => {
+				await this.getAccountData()
+				await this.getInstrumentsData()
+			}
 		}
 		this.ws = ws
 	}
@@ -39,12 +54,17 @@ export class CTAccount{
 		this.account = a
 	}
 
-	async getAccountData(ws: WebSocket){
-		this.setAccount(await this.likeFetch<GetAccountsRequest, GetAccountsResponse>({
-			service:"users",
-			method: "getAccounts",
-			payload: {}
-		}).then(p => p.accounts[0]))
+	async getAccountData(){
+		this.setAccount(await tApi.Users.getAccounts({}).then(r => r.accounts[0]))
+	}
+
+	async getInstrumentsData(){
+		this.info.instruments.shares = await tApi.Instruments.shares({
+			instrumentStatus: InstrumentStatus.BASE
+		}).then(r => r.instruments)
+		this.info.instruments.futures = await tApi.Instruments.futures({
+			instrumentStatus: InstrumentStatus.BASE
+		}).then(r => r.instruments)
 	}
 	
 	main(e: MessageEvent<string>){
@@ -56,9 +76,7 @@ export class CTAccount{
 	}
 
 	async likeFetch<REQ,RES>(data:IWSMessageData<REQ>): Promise<RES>{
-		if(!this.ws){
-			alert("ПОДКЛЮЧИСЬ")
-		}
+		if(!this.ws) {console.log(" WS is closed ")}
 		return new Promise<RES>((resolve,reject) => {
 			const timeout = setTimeout(() => reject("Timeout exceeded"),wsTimeot)
 			const response = (data:RES) => {

@@ -17,6 +17,8 @@ export const MainHandler = async(ws:WebSocket, tApi:CTApi, message:string) => {
 		}
 	}
 
+	// console.log("response.data.payload === ",response.data.payload)
+
 	// if(req.service === "users"){
 	// 	const service = tApi["users"]
 	// 	const method = service[req.proc as keyof CTApi["users"]]//Metod<CTApi["users"]>]
