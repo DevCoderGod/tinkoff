@@ -56,6 +56,9 @@ export class CTAccount{
 	}
 
 	async likeFetch<REQ,RES>(data:IWSMessageData<REQ>): Promise<RES>{
+		if(!this.ws){
+			alert("ПОДКЛЮЧИСЬ")
+		}
 		return new Promise<RES>((resolve,reject) => {
 			const timeout = setTimeout(() => reject("Timeout exceeded"),wsTimeot)
 			const response = (data:RES) => {

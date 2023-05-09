@@ -8,7 +8,8 @@ import { Operation } from '../../../../shared/tsproto/operations'
 import { tApi } from '../../tApi'
 import { InstrumentIdType, Share, ShareResponse } from '../../tsproto/instruments'
 import { OperationsRequest, OperationsResponse } from "@tinkoff/operations"
-
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 interface LocOps{
 	id: string
 	ticker:string
@@ -23,7 +24,8 @@ export const History = observer(function History() {
 
 	const [history, setHistory] = useState<Operation[]>([])
 	const [historyLocal, setHistoryLocal] = useState<LocOps[]>([])
-
+	const [startDate, setStartDate] = useState(new Date())
+	const [endDate, setEndDate] = useState(new Date())
 
 	useEffect(()=>{
 
@@ -59,16 +61,12 @@ export const History = observer(function History() {
 		return ticker
 	}
 
-
-
-	// let data = await getData()
-
 	async function onClick() {
 		const r =await tApi.Operations.getOperations(
 			{
 				accountId:Store.tAccount.account.id,
-				from: Timestamp.fromDate(new Date("2023-04-23Z")),
-				to: Timestamp.fromDate(new Date("2023-04-25Z")),
+				from: Timestamp.fromDate(startDate),
+				to: Timestamp.fromDate(endDate),
 				state: 0,
 				figi:""
 			}
@@ -78,9 +76,15 @@ export const History = observer(function History() {
 
 	return (
 		<div className={S.container}>
-			<button onClick={onClick}>
-				история
-			</button>
+			<div className={S.header}>
+				<div className={S.datepickers}>
+					<DatePicker selected={startDate} onChange={(date) => date && setStartDate(date)} />
+					<DatePicker selected={endDate} onChange={(date) => date && setEndDate(date)} />
+				</div>
+				<button onClick={onClick}>
+					история
+				</button>
+			</div>
 			{historyLocal.length>0 && <Table
 				ops={historyLocal}
 			/>}
