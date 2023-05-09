@@ -46,47 +46,39 @@ export class CTAccount{
 		this.responses = {}
 	}
 
+	setStatus = (s:TStatus) => this.status = s
+
+	setAccount = (a:Account) => this.account = a
+
 	setWs(ws:WebSocket | null){
 		if(ws){
-			ws.onmessage = (e) => this.main(e)
-			ws.onopen = async (e) => {
-				this.setStatus("query")
-				await this.getAccountData()
-				await this.getInstrumentsData()
-				this.account?.id && this.account.status === AccountStatus.OPEN && this.setStatus("online")
-			}
-			ws.onclose = e => {
-				this.setWs(null)
-				this.setAccount({} as Account)
-				this.setStatus("offline")
-			}
+			ws.onmessage = e => this.messageHandler(e)
+			ws.onopen =  e => this.openHandler(e)
+			ws.onclose = e => this.closeHandler(e)
 		}
 		this.ws = ws
-	}
+	}	
 
-	setStatus(s:TStatus){
-		this.status = s
-	}
-
-	setAccount(a:Account){
-		this.account = a
-	}
-
-	async getAccountData(){
+	async openHandler(e: Event){
+		this.setStatus("query")
 		this.setAccount(await tApi.Users.getAccounts({}).then(r => r.accounts[0]))
-	}
-
-	async getInstrumentsData(){
 		this.info.instruments.shares = await tApi.Instruments.shares({
 			instrumentStatus: InstrumentStatus.BASE
 		}).then(r => r.instruments)
-		this.info.instruments.futures = await tApi.Instruments.futures({
-			instrumentStatus: InstrumentStatus.BASE
-		}).then(r => r.instruments)
+		// this.info.instruments.futures = await tApi.Instruments.futures({
+		// 	instrumentStatus: InstrumentStatus.BASE
+		// }).then(r => r.instruments)
+		this.account?.id && this.account.status === AccountStatus.OPEN && this.setStatus("online")
 	}
-	
-	main(e: MessageEvent<string>){
-		const message:IWSMessage = JSON.parse(e.data)
+
+	closeHandler(e: CloseEvent){
+		this.setWs(null)
+		this.setAccount({} as Account)
+		this.setStatus("offline")
+	}
+
+	messageHandler(e: MessageEvent<string>){
+			const message:IWSMessage = JSON.parse(e.data)
 		if(this.responses[message.id]){
 			this.responses[message.id](message.data.payload)
 			delete this.responses[message.id]
