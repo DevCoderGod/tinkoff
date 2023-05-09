@@ -6,10 +6,13 @@ import { tApi } from '../tApi'
 import { Account } from '@tinkoff/users'
 import { Future, Share } from '@tinkoff/instruments'
 import { InstrumentStatus } from '../tsproto/instruments'
+import { AccountStatus } from '../tsproto/users'
 
 interface IResponces{
 	[key:number]:(data:any)=>void
 }
+
+type TStatus = "online" | "connection" | "offline" | "query"
 
 interface IInfo{
 	instruments:{
@@ -19,6 +22,7 @@ interface IInfo{
 }
 
 export class CTAccount{
+	status: TStatus
 	ws: WebSocket | null
 	wsMessageId: number
 	responses:IResponces
@@ -26,12 +30,15 @@ export class CTAccount{
 	info: IInfo
 
 	constructor(){
-        makeObservable(this, {
-            ws: observable,
-            account: observable,
+		makeObservable(this, {
+			status: observable,
+			ws: observable,
+			account: observable,
 			setWs: action,
 			setAccount: action,
-        })
+			setStatus: action,
+		})
+		this.status = "offline"
 		this.ws = null
 		this.account = {} as Account
 		this.info = {instruments:{}} as IInfo
@@ -43,11 +50,22 @@ export class CTAccount{
 		if(ws){
 			ws.onmessage = (e) => this.main(e)
 			ws.onopen = async (e) => {
+				this.setStatus("query")
 				await this.getAccountData()
 				await this.getInstrumentsData()
+				this.account?.id && this.account.status === AccountStatus.OPEN && this.setStatus("online")
+			}
+			ws.onclose = e => {
+				this.setWs(null)
+				this.setAccount({} as Account)
+				this.setStatus("offline")
 			}
 		}
 		this.ws = ws
+	}
+
+	setStatus(s:TStatus){
+		this.status = s
 	}
 
 	setAccount(a:Account){
@@ -76,7 +94,7 @@ export class CTAccount{
 	}
 
 	async likeFetch<REQ,RES>(data:IWSMessageData<REQ>): Promise<RES>{
-		if(!this.ws) {console.log(" WS is closed ")}
+		if(!this.ws) throw new Error(" WS is closed ")
 		return new Promise<RES>((resolve,reject) => {
 			const timeout = setTimeout(() => reject("Timeout exceeded"),wsTimeot)
 			const response = (data:RES) => {
@@ -98,6 +116,7 @@ export class CTAccount{
 
 	async connect(token:string):Promise<any>{
 		if(!token) return false
+		this.setStatus("connection")
 		try {
 			const port = await fetchJSON<{token:string}, {port:string}>(`${server}tinkoff/connect`, "POST",{token})
 			if(!port) throw new Error(`the server did not provide a port`)

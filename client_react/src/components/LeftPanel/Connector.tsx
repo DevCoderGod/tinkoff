@@ -13,6 +13,15 @@ export const Connector = observer(function Connector(){
 		Store.tAccount.connect(refTok.current?.value ?? "")
 	}
 
+	function getInscription(){
+		switch (Store.tAccount.status) {
+			case "connection": return "соединение..."
+			case "online": return "Разъеденить"
+			case "offline": return "Соединить"
+			case "query": return "Запрос данных аккаунта"
+		}
+	}
+
 	async function disconnect(){
 		Store.tAccount.disconnect()
 	}
@@ -28,7 +37,7 @@ export const Connector = observer(function Connector(){
 			/>
 			<Button
 				onClick = {Store.tAccount.ws ? disconnect : connect}
-				inscription={Store.tAccount.ws ? "Разъеденить" : "Соединить"}
+				inscription={getInscription()}
 			/>
 		</div>
 	)
