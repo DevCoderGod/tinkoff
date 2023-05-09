@@ -6,7 +6,6 @@ import { observer } from "mobx-react-lite"
 import { Timestamp } from '../../tsproto/google/protobuf/timestamp'
 import { Operation } from '../../../../shared/tsproto/operations'
 import { tApi } from '../../tApi'
-import { InstrumentIdType } from '../../tsproto/instruments'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 interface LocOps{
@@ -32,7 +31,6 @@ export const History = observer(function History() {
 			const m = Promise.all( history.map(async (o: Operation) => {
 				const operation = {
 					id: o.id,
-					// ticker: await getTicker(o.figi),
 					ticker: await getTickerFromStore(o.figi),
 					quantity: o.quantity,
 					price: Number.parseFloat(`${o.price?.units}.${o.price?.nano}`),
@@ -54,16 +52,6 @@ export const History = observer(function History() {
 	async function getTickerFromStore(i:string):Promise<string>{
 		return Store.tAccount.info.instruments.shares.find(share=>share.figi === i)?.ticker ?? "no Ticker"
 	}
-
-	// async function getTicker(i:string):Promise<string>{
-
-	// 	let ticker:string = await tApi.Instruments.shareBy({
-	// 		idType: InstrumentIdType.INSTRUMENT_ID_TYPE_FIGI,
-	// 		classCode:"",
-	// 		id: i
-	// 	}).then(shareData => shareData.instrument?.ticker ?? "no Ticker")
-	// 	return ticker
-	// }
 
 	async function onClick() {
 		const r =await tApi.Operations.getOperations(
