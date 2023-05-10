@@ -26,32 +26,17 @@ export const History = observer(function History() {
 	const [endDate, setEndDate] = useState(new Date())
 
 	useEffect(()=>{
-
-		async function getData():Promise<LocOps[]>{
-			const m = Promise.all( history.map(async (o: Operation) => {
-				const operation = {
-					id: o.id,
-					ticker: await getTickerFromStore(o.figi),
-					quantity: o.quantity,
-					price: Number.parseFloat(`${o.price?.units}.${o.price?.nano}`),
-					type: o.type,
-					date: o.date? new Date(Number.parseInt(o.date.seconds)*1000).toLocaleString() : "no Date"
-				}
-				return operation
-			}))
-			return m
-		}
-
-		async function getHistoryLocal(){
-			const ops = await getData()
-			setHistoryLocal(ops)
-		}
-		getHistoryLocal()
+		setHistoryLocal(history.map((o: Operation) => {
+			return {
+				id: o.id,
+				ticker: Store.tAccount.info.instruments.shares.find(share=>share.figi === o.figi)?.ticker ?? "no Ticker",
+				quantity: o.quantity,
+				price: Number.parseFloat(`${o.price?.units}.${o.price?.nano}`),
+				type: o.type,
+				date: o.date? new Date(Number.parseInt(o.date.seconds)*1000).toLocaleString() : "no Date"
+			}
+		}))
 	},[history])
-
-	async function getTickerFromStore(i:string):Promise<string>{
-		return Store.tAccount.info.instruments.shares.find(share=>share.figi === i)?.ticker ?? "no Ticker"
-	}
 
 	async function onClick() {
 		const r =await tApi.Operations.getOperations(
