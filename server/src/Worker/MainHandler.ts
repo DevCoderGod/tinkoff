@@ -4,17 +4,21 @@ import { IWSMessage, IWSMessageData } from '@api'
 
 export const MainHandler = async(ws:WebSocket, tApi:CTApi, message:string) => {
 	const request:IWSMessage = JSON.parse(message) //TODO try catch
-	request.data
-
-	// @ts-ignore
-	const payload:IWSMessageData<any> = await tApi[request.data.service][request.data.method](request.data.payload).response // TODO typing
+	
 	const response:IWSMessage = {
 		id: request.id,
 		data: {
 			service:request.data.service,
 			method:request.data.method,
-			payload
+			payload:{}
 		}
+	}
+
+	try {
+		// @ts-ignore
+		response.data.payload = await tApi[request.data.service][request.data.method](request.data.payload).response // TODO typing
+	} catch (err:any) {
+		response.error = `code:${err.code}. ${err.meta.message}`
 	}
 
 	// console.log("response.data.payload === ",response.data.payload)

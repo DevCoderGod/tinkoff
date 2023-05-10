@@ -5,12 +5,18 @@ import { Store } from "../../Store"
 import { Button } from "./common/Button/Button"
 import { Title } from "./common/Title/Title"
 import { Input } from "./common/Input/Input"
+import { toast } from 'react-toastify'
+  import 'react-toastify/dist/ReactToastify.css'
 
 export const Connector = observer(function Connector(){
 	const refTok = useRef<HTMLInputElement>(null)
 
 	async function connect(){
-		Store.tAccount.connect(refTok.current?.value ?? "")
+		try {
+			await Store.tAccount.connect(refTok.current?.value ?? "")
+		} catch (err:any) {
+			toast(`Ошибка: ${err.message}`)
+		}
 	}
 
 	function getInscription(){

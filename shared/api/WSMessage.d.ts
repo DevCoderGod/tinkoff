@@ -19,4 +19,5 @@ export interface IWSMessageData<Payload> {
 export interface IWSMessage {
 	id: number
 	data: IWSMessageData
+	error?:any
 }

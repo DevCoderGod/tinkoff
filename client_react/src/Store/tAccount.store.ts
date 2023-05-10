@@ -7,9 +7,13 @@ import { Account } from '@tinkoff/users'
 import { Future, Share } from '@tinkoff/instruments'
 import { InstrumentStatus } from '../tsproto/instruments'
 import { AccountStatus } from '../tsproto/users'
+import { toast } from 'react-toastify'
 
 interface IResponces{
-	[key:number]:(data:any)=>void
+	[key:number]:{
+		resolve:(data:any)=>void
+		reject:(data:any)=>void
+	}
 }
 
 type TStatus = "online" | "connection" | "offline" | "query"
@@ -61,14 +65,26 @@ export class CTAccount{
 
 	async openHandler(e: Event){
 		this.setStatus("query")
-		this.setAccount(await tApi.Users.getAccounts({}).then(r => r.accounts[0]))
-		this.info.instruments.shares = await tApi.Instruments.shares({
-			instrumentStatus: InstrumentStatus.BASE
-		}).then(r => r.instruments)
-		// this.info.instruments.futures = await tApi.Instruments.futures({
-		// 	instrumentStatus: InstrumentStatus.BASE
-		// }).then(r => r.instruments)
-		this.account?.id && this.account.status === AccountStatus.OPEN && this.setStatus("online")
+
+		await tApi.Users.getAccounts({})
+		.then(r => this.setAccount(r.accounts[0]))
+		.catch(r => {
+			toast(`Ошибка: ${r}`)
+			this.setStatus("offline")
+		})
+		
+		if(this.account.id && this.account.status === AccountStatus.OPEN){
+			Promise.all( 
+				this.info.instruments.shares = await tApi.Instruments.shares({
+					instrumentStatus: InstrumentStatus.BASE
+				}).then(r => r.instruments)
+				// this.info.instruments.futures = await tApi.Instruments.futures({
+				// 	instrumentStatus: InstrumentStatus.BASE
+				// }).then(r => r.instruments)
+			)
+			.then(()=> this.setStatus("online"))
+			.catch(err => {toast(`Ошибка: ${err}`)})
+		}
 	}
 
 	closeHandler(e: CloseEvent){
@@ -78,24 +94,35 @@ export class CTAccount{
 	}
 
 	messageHandler(e: MessageEvent<string>){
-			const message:IWSMessage = JSON.parse(e.data)
+		const message:IWSMessage = JSON.parse(e.data)
 		if(this.responses[message.id]){
-			this.responses[message.id](message.data.payload)
+			if(message.error){this.responses[message.id].reject(message.error)}
+			else this.responses[message.id].resolve(message.data.payload)
 			delete this.responses[message.id]
 		} else console.log('unknown message from ws: ',message)
 	}
 
 	async likeFetch<REQ,RES>(data:IWSMessageData<REQ>): Promise<RES>{
-		if(!this.ws) throw new Error(" WS is closed ")
 		return new Promise<RES>((resolve,reject) => {
-			const timeout = setTimeout(() => reject("Timeout exceeded"),wsTimeot)
-			const response = (data:RES) => {
-				globalThis.clearTimeout(timeout)
-				resolve(data)
+			if(!this.ws) {
+				toast("Нет соединения с сервером.")
+				// throw new Error("WS is closed")
+				reject("WS is closed")
 			}
 			const request:IWSMessage = {
 				id: this.getMessageId,
 				data
+			}
+			const timeout = setTimeout(() => reject("Timeout exceeded"),wsTimeot)
+			const response = {
+				resolve:(data:RES) => {
+					globalThis.clearTimeout(timeout)
+					resolve(data)
+				},
+				reject:(data:any) => {
+					globalThis.clearTimeout(timeout)
+					reject(data)
+				}
 			}
 			this.responses[request.id]=response
 			this.ws!.send(JSON.stringify(request))
@@ -107,15 +134,17 @@ export class CTAccount{
 	}
 
 	async connect(token:string):Promise<any>{
-		if(!token) return false
+		if(!token) throw new Error("Токен пуст")
+
 		this.setStatus("connection")
 		try {
 			const port = await fetchJSON<{token:string}, {port:string}>(`${server}tinkoff/connect`, "POST",{token})
 			if(!port) throw new Error(`the server did not provide a port`)
 			const ws = new WebSocket(`ws://localhost:${port.port}`)
+			if(!ws) throw new Error(`the server did not provide a socket`)
 			this.setWs(ws)
-		} catch (err) {
-			console.log('connect error: ',err)
+		} catch (err:any) {
+			throw new Error('connect error: ',err)
 		}
 	}
 
