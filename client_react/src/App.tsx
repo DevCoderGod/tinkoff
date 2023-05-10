@@ -2,6 +2,8 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import S from './App.module.scss'
 import { observer } from "mobx-react-lite"
 import { Store } from "./Store"
+import { ToastContainer } from 'react-toastify'
+// import 'react-toastify/dist/ReactToastify.css'
 import { Home } from "./pages/Home"
 import { Terminal } from "./pages/Terminal"
 import { TradeSpace } from "./pages/TradeSpace"
@@ -33,6 +35,19 @@ export const App = observer(function App() {
 		<div className={S.app}>
 			<LeftPanel/>
 			<Router/>
+			<ToastContainer
+				position="top-right"
+				autoClose={1500}
+				limit={3}
+				hideProgressBar={true}
+				newestOnTop
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				theme="dark"
+			/>
 		</div>
 	)
 })
