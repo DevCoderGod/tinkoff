@@ -96,7 +96,10 @@ export class CTAccount{
 	messageHandler(e: MessageEvent<string>){
 		const message:IWSMessage = JSON.parse(e.data)
 		if(this.responses[message.id]){
-			if(message.error){this.responses[message.id].reject(message.error)}
+			if(message.error){
+				toast(message.error)
+				this.responses[message.id].reject(message.error)
+			}
 			else this.responses[message.id].resolve(message.data.payload)
 			delete this.responses[message.id]
 		} else console.log('unknown message from ws: ',message)
