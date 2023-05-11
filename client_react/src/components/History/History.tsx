@@ -42,8 +42,8 @@ export const History = observer(function History() {
 		const r =await tApi.Operations.getOperations(
 			{
 				accountId:Store.tAccount.account.id,
-				from: Timestamp.fromDate(startDate),
-				to: Timestamp.fromDate(endDate),
+				from: Timestamp.fromDate(getDateOnly(startDate)),
+				to: Timestamp.fromDate(getDateOnly(endDate)),
 				state: 0,
 				figi:""
 			}
@@ -59,8 +59,23 @@ export const History = observer(function History() {
 		<div className={S.container}>
 			<div className={S.header}>
 				<div className={S.datepickers}>
-					<DatePicker selected={startDate} onChange={(date) => date && setStartDate(getDateOnly(date))} />
-					<DatePicker selected={endDate} onChange={(date) => date && setEndDate(date)} />
+					<DatePicker
+						selected={startDate}
+						selectsStart
+						dateFormat="dd/MM/yyyy"
+						onChange={(date) => date && setStartDate(date)}
+						startDate={startDate}
+						endDate={endDate}
+					/>
+					<DatePicker
+						selected={endDate}
+						selectsEnd
+						dateFormat="dd/MM/yyyy"
+						onChange={(date) => date && setEndDate(date)}
+						startDate={startDate}
+						endDate={endDate}
+						minDate={startDate}
+					/>
 				</div>
 				<button onClick={onClick}>
 					история
