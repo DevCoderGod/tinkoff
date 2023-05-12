@@ -35,7 +35,7 @@ export const History = observer(function History() {
 	useEffect(()=>{
 		setHistoryLocal(history
 			.filter(op => filterOps(op))
-			.map((o: Operation) => {
+			.map((o: Operation):LocOps => {
 				return {
 					id: o.id,
 					ticker: Store.tAccount.info.instruments.shares.find(share=>share.figi === o.figi)?.ticker ?? "no Ticker",
@@ -46,10 +46,17 @@ export const History = observer(function History() {
 					state: OperationState[o.state]
 				}
 			})
+			.sort((a,b) => sortOps(a,b))
 		)
 	},[history, filter])
 
-	function filterOps(op: Operation):Operation | undefined {
+	function sortOps(a:LocOps,b:LocOps):number{
+		if(a.ticker > b.ticker) return 1
+		if(a.ticker < b.ticker) return -1
+		return 0
+	}
+	
+	function filterOps(op:Operation):Operation | undefined {
 		if(execRef.current?.checked && op.state.toString() === execRef.current?.value) return op
 		if(cancelRef.current?.checked && op.state.toString() === cancelRef.current?.value) return op
 		return
