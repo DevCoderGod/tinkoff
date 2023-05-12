@@ -10,7 +10,7 @@ import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { OperationState } from '../../tsproto/operations'
 
-interface LocOps{
+interface ViewOps{
 	id: string
 	ticker:string
 	quantity:string
@@ -26,40 +26,42 @@ export const History = observer(function History() {
 	const cancelRef = useRef<HTMLInputElement>(null)
 
 	const [history, setHistory] = useState<Operation[]>([])
-	const [historyLocal, setHistoryLocal] = useState<LocOps[]>([])
+	const [historyView, setHistoryView] = useState<ViewOps[]>([])
 	const [startDate, setStartDate] = useState(new Date())
 	const [endDate, setEndDate] = useState(new Date())
 	const [filter, setFilter] = useState(true)
 	const runFilter = () => setFilter(!filter)
 
 	useEffect(()=>{
-		setHistoryLocal(history
-			.filter(op => filterOps(op))
-			.map((o: Operation):LocOps => {
-				return {
-					id: o.id,
-					ticker: Store.tAccount.info.instruments.shares.find(share=>share.figi === o.figi)?.ticker ?? "no Ticker",
-					quantity: o.quantity,
-					price: Number.parseFloat(`${o.price?.units}.${o.price?.nano}`),
-					type: o.type,
-					date: o.date? new Date(Number.parseInt(o.date.seconds)*1000).toLocaleString() : "no Date",
-					state: OperationState[o.state]
-				}
-			})
+		setHistoryView(history
+			.filter(filterOps)
+			.map(viewOps)
 			.sort((a,b) => sortOps(a,b))
 		)
 	},[history, filter])
-
-	function sortOps(a:LocOps,b:LocOps):number{
-		if(a.ticker > b.ticker) return 1
-		if(a.ticker < b.ticker) return -1
-		return 0
-	}
 	
 	function filterOps(op:Operation):Operation | undefined {
 		if(execRef.current?.checked && op.state.toString() === execRef.current?.value) return op
 		if(cancelRef.current?.checked && op.state.toString() === cancelRef.current?.value) return op
 		return
+	}
+
+	function viewOps(o: Operation):ViewOps{
+		return {
+			id: o.id,
+			ticker: Store.tAccount.info.instruments.shares.find(share=>share.figi === o.figi)?.ticker ?? "no Ticker",
+			quantity: o.quantity,
+			price: Number.parseFloat(`${o.price?.units}.${o.price?.nano}`),
+			type: o.type,
+			date: o.date? new Date(Number.parseInt(o.date.seconds)*1000).toLocaleString() : "no Date",
+			state: OperationState[o.state]
+		}
+	}
+
+	function sortOps(a:ViewOps,b:ViewOps):number{
+		if(a.ticker > b.ticker) return 1
+		if(a.ticker < b.ticker) return -1
+		return 0
 	}
 
 	async function onClick() {
@@ -125,9 +127,9 @@ export const History = observer(function History() {
 					/>
 				</label>
 			</div>
-			{historyLocal.length>0
+			{historyView.length>0
 				?	<Table
-						ops={historyLocal}
+						ops={historyView}
 					/>
 				:	<div>Нет операций</div>
 			}
