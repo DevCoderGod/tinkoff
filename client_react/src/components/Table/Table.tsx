@@ -4,7 +4,7 @@ import cn from "classnames"
 
 export function Table(props:{ops:any[]}) {
 	return (
-		<table>
+		<table className={S.table}>
 			<tbody>{
 				props.ops.map(op => {
 					return <tr key={op.id}>{
