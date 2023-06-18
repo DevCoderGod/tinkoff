@@ -147,6 +147,7 @@ export class CTAccount{
 			if(!ws) throw new Error(`the server did not provide a socket`)
 			this.setWs(ws)
 		} catch (err:any) {
+			this.setStatus("offline")
 			throw new Error('connect error: ',err)
 		}
 	}
