@@ -9,17 +9,17 @@ export class CUserStore{
 	token: string
 
 	constructor() {
-        makeObservable(this, {
-            user: observable,
-            token: observable,
-            userName: computed,
+		makeObservable(this, {
+			user: observable,
+			token: observable,
+			userName: computed,
 			setUser:action,
 			setToken:action,
 			login:action,
 			logout:action,
-        })
-		this.token = localStorage.getItem("token") ?? ""
-        this.user = null
+		})
+		this.token = this.getTockenFromLocalstorage()
+		this.user = null
 	}
 
 	get userName(){
@@ -64,6 +64,11 @@ export class CUserStore{
 		this.setUser(null)
 		this.setToken("")
 		app.setIsAuth(false)
+	}
+
+	getTockenFromLocalstorage():string{
+		return localStorage.getItem("token") ?? ""
+		// TODO check token
 	}
 }
 
