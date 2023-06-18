@@ -1,0 +1,24 @@
+.container {
+	height: 550px;
+	border-radius: 5px;
+	background-color: var(--background-widget);
+
+	display: flex;
+	flex-direction: column;
+}
+
+.title {
+	padding: 2px 5px;
+}
+
+.body {
+	// height: 550px;
+	width: 100%;
+	overflow: hidden;
+	padding: 2px 5px;
+	flex-grow: 1;
+	position: relative;
+
+	display: flex;
+	flex-direction: column;
+}
