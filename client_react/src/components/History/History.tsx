@@ -6,8 +6,7 @@ import { observer } from "mobx-react-lite"
 import { Timestamp } from '../../tsproto/google/protobuf/timestamp'
 import { Operation } from '../../../../shared/tsproto/operations'
 import { tApi } from '../../tApi'
-import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
+import { DatePickerRangeStart, DatePickerRangeEnd } from "../common/DatePickerRange/DatePickerRange"
 import { OperationState } from '../../tsproto/operations'
 
 interface ViewOps{
@@ -64,7 +63,7 @@ export const History = observer(function History() {
 		return 0
 	}
 
-	async function onClick() {
+	async function getHistory() {
 		const r =await tApi.Operations.getOperations(
 			{
 				accountId:Store.tAccount.account.id,
@@ -85,28 +84,18 @@ export const History = observer(function History() {
 		<div className={S.container}>
 			<div className={S.header}>
 				<div className={S.datepickers}>
-					<DatePicker
-						selected={startDate}
-						selectsStart
-						dateFormat="dd/MM/yyyy"
-						onChange={(date) => date && setStartDate(date)}
+					<DatePickerRangeStart
 						startDate={startDate}
 						endDate={endDate}
+						onChange={setStartDate}
 					/>
-					<DatePicker
-						selected={endDate}
-						selectsEnd
-						dateFormat="dd/MM/yyyy"
-						onChange={(date) => date && setEndDate(date)}
+					<DatePickerRangeEnd
 						startDate={startDate}
 						endDate={endDate}
-						minDate={startDate}
+						onChange={setEndDate}
 					/>
 				</div>
-				<button onClick={onClick}>
-					история
-				</button>
-
+				<button className={S.button} onClick={getHistory}>История</button>
 				<label>
 					Исполненные
 					<input
@@ -127,12 +116,14 @@ export const History = observer(function History() {
 					/>
 				</label>
 			</div>
-			{historyView.length>0
-				?	<Table
-						ops={historyView}
-					/>
-				:	<div>Нет операций</div>
-			}
+			<div className={S.body}>
+				{historyView.length>0
+					?	<Table
+							ops={historyView}
+						/>
+					:	<div>Нет операций</div>
+				}
+			</div>
 		</div>
 	)
 })

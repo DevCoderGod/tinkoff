@@ -1,4 +1,5 @@
 import { observer } from "mobx-react-lite"
+import S from './Header.module.scss'
 
 interface IProps {
 	title:string
@@ -6,11 +7,7 @@ interface IProps {
 
 export const Header = observer(function Header(props:IProps){
 	return(
-		<header style={{
-			"display":"flex",
-			"alignItems":"center",
-			"marginLeft":"500px"
-		}}>
+		<header className={S.header}>
 			<h1>{props.title}</h1>
 		</header>
 	)

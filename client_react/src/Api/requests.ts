@@ -25,23 +25,24 @@ export async function fetchJSON<REQ,RES>(url:string, method:string, body?:REQ):P
 			if(res.status === 401){
 				if(!limit) throw new Error('retry limit exceeded')
 				limit--
-				const aTokenString = await fetchAToken(`${server}auth/refresh`)
+				const aTokenString = await fetchAToken()
 				Store.user.setToken(aTokenString)
 				return await fetch(url,{...signParam(param)})
 					.then(async(res)=> {
 						if(res.status === 200) return await res.json().catch((err)=> {throw new Error(`res.json(): ${err}`)})
 						if(res.status === 401) Store.user.logout()
-						else throw new Error(`fetch error responce: ${res}`)
+						else throw new Error(`fetchJSON error responce: ${res}`)
 					})
+					.catch(err => {throw new Error(`fetchJSON is filed: ${err}`)})
 			}
 			else throw new Error(`fetch error responce: ${res}`)
 		})
 }
 
-export async function fetchAToken(url:string):Promise<string> {
-	return await fetch(url,{method:"POST"})
-	.then( res => {
-		if(res.status === 200) return res.json()
+export async function fetchAToken():Promise<string> {
+	return await fetch(`${server}auth/refresh`,{method:"POST"})
+	.then( async res => {
+		if(res.status === 200) return await res.json()
 			.then((data:{token:string}) => data.token)
 			.catch(err => {throw new Error(`fetchAToken is filed: ${err}`)})
 		else throw new Error(`fetchAToken is filed: status: ${res.status}`)

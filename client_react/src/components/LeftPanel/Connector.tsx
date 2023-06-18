@@ -21,7 +21,7 @@ export const Connector = observer(function Connector(){
 
 	function getInscription(){
 		switch (Store.tAccount.status) {
-			case "connection": return "соединение..."
+			case "connection": return "Соединение..."
 			case "online": return "Разъеденить"
 			case "offline": return "Соединить"
 			case "query": return "Запрос данных аккаунта"
