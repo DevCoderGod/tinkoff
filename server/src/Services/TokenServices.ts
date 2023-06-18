@@ -32,7 +32,7 @@ export const TokenService = {
 		try {
 			return jwt.verify(tokenString, VARS.aTokenSecret,{ complete: true }).payload as IPayload
 		} catch (err:any) {
-			console.log(' verifyRToken is err: ',err.message)
+			console.log(' verifyAToken is err: ',err.message)
 			return false
 		}
 	},
