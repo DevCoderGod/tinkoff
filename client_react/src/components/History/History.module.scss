@@ -9,6 +9,7 @@
 	display: flex;
 	justify-content: flex-start;
 	border-bottom: solid 1px var(--text-color);
+	margin-bottom: 5px;
 	padding: 5px 0;
 	& > *:not(:first-child) {
 		margin-left: 5px;
@@ -31,8 +32,7 @@
 
 .body {
 	height: 0;
-	margin-right: -25px;
-	// padding-right: 25px;
 	flex-grow: 1;
 	overflow-y: scroll;
+	overflow-x: hidden;
 }
