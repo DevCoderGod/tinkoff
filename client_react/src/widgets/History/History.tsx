@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import S from './History.module.scss'
 import { Store } from '../../Store'
-import { Table } from '../Table/Table'
+import { Table } from '../../components/Table/Table'
 import { observer } from "mobx-react-lite"
 import { Timestamp } from '../../tsproto/google/protobuf/timestamp'
 import { Operation } from '../../../../shared/tsproto/operations'
 import { tApi } from '../../tApi'
-import { DatePickerRangeStart, DatePickerRangeEnd } from "../common/DatePickerRange/DatePickerRange"
+import { DatePickerRangeStart, DatePickerRangeEnd } from "../../components/common/DatePickerRange/DatePickerRange"
 import { OperationState } from '../../tsproto/operations'
 
 interface ViewOps{

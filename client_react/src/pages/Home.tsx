@@ -1,7 +1,7 @@
 import S from './Home.module.scss'
 import { Store } from '../Store'
 import { Header } from '../components/Header/Header'
-import { HistoryWidget } from '../widgets/HistoryWidget'
+import { HistoryWidget } from '../widgets/History/HistoryWidget'
 
 export const Home = () => {
 	
