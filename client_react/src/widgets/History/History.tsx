@@ -11,10 +11,11 @@ import { OperationState } from '../../tsproto/operations'
 
 interface ViewOps{
 	id: string
-	ticker:string
-	quantity:string
-	price:number
+	ticker: string
+	quantity: string
+	price: string
 	type: string
+	summ: string
 	date: string
 	state: string
 }
@@ -48,10 +49,11 @@ export const History = observer(function History() {
 	function viewOps(o: Operation):ViewOps{
 		return {
 			id: o.id,
-			ticker: Store.tAccount.info.instruments.shares.find(share=>share.figi === o.figi)?.ticker ?? "no Ticker",
-			quantity: o.quantity,
-			price: Number.parseFloat(`${o.price?.units}.${o.price?.nano}`),
+			ticker: Store.tAccount.info.viewTicker(o.figi, o.instrumentType),
+			quantity: o.quantity !== "0" ? o.quantity : "",
+			price: Store.tAccount.info.viewMoneyValue(o.price, o.figi, o.instrumentType),
 			type: o.type,
+			summ: Store.tAccount.info.viewMoneyValue(o.payment, o.figi, o.instrumentType),
 			date: o.date? new Date(Number.parseInt(o.date.seconds)*1000).toLocaleString() : "no Date",
 			state: OperationState[o.state]
 		}
@@ -64,19 +66,19 @@ export const History = observer(function History() {
 	}
 
 	async function getHistory() {
-		const r =await tApi.Operations.getOperations(
-			{
+		setHistory(
+			await tApi.Operations.getOperations({
 				accountId:Store.tAccount.account.id,
 				from: Timestamp.fromDate(getDateOnly(startDate)),
 				to: Timestamp.fromDate(getDateOnly(endDate)),
 				state: 0,
 				figi:""
-			}
+			})
+			.then(r => r.operations)
 		)
-		setHistory(r.operations)
 	}
 
-	function getDateOnly(date:Date){
+	function getDateOnly(date:Date){ //TODO cut off time
 		return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 	}
 
