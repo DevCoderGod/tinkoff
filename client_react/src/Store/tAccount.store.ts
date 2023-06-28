@@ -4,10 +4,9 @@ import { fetchJSON } from "../Api/requests"
 import { IWSMessageData, IWSMessage } from '@api'
 import { tApi } from '../tApi'
 import { Account } from '@tinkoff/users'
-import { Future, Share } from '@tinkoff/instruments'
-import { InstrumentStatus } from '../tsproto/instruments'
 import { AccountStatus } from '../tsproto/users'
 import { toast } from 'react-toastify'
+import { CInfo } from './info'
 
 interface IResponces{
 	[key:number]:{
@@ -18,20 +17,13 @@ interface IResponces{
 
 type TStatus = "online" | "connection" | "offline" | "query"
 
-interface IInfo{
-	instruments:{
-		shares: Share[]
-		futures: Future[]
-	}
-}
-
 export class CTAccount{
 	status: TStatus
 	ws: WebSocket | null
 	wsMessageId: number
 	responses:IResponces
 	account: Account
-	info: IInfo
+	info: CInfo
 
 	constructor(){
 		makeObservable(this, {
@@ -45,7 +37,7 @@ export class CTAccount{
 		this.status = "offline"
 		this.ws = null
 		this.account = {} as Account
-		this.info = {instruments:{}} as IInfo
+		this.info = new CInfo()
 		this.wsMessageId = 0
 		this.responses = {}
 	}
@@ -69,21 +61,13 @@ export class CTAccount{
 		await tApi.Users.getAccounts({})
 		.then(r => this.setAccount(r.accounts[0]))
 		.catch(r => {
-			toast(`Ошибка: ${r}`)
+			toast(`Ошибка openHandler: ${r}`)
 			this.setStatus("offline")
 		})
 		
 		if(this.account.id && this.account.status === AccountStatus.OPEN){
-			Promise.all( 
-				this.info.instruments.shares = await tApi.Instruments.shares({
-					instrumentStatus: InstrumentStatus.BASE
-				}).then(r => r.instruments)
-				// this.info.instruments.futures = await tApi.Instruments.futures({
-				// 	instrumentStatus: InstrumentStatus.BASE
-				// }).then(r => r.instruments)
-			)
-			.then(()=> this.setStatus("online"))
-			.catch(err => {toast(`Ошибка: ${err}`)})
+			await this.info.getInfoData()
+			.then(ok=>ok ? this.setStatus("online") : this.setStatus("offline"))
 		}
 	}
 
