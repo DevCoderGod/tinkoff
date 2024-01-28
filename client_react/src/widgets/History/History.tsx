@@ -8,6 +8,8 @@ import { Operation } from '../../../../shared/tsproto/operations'
 import { tApi } from '../../tApi'
 import { DatePickerRangeStart, DatePickerRangeEnd } from "../../components/common/DatePickerRange/DatePickerRange"
 import { OperationState } from '../../tsproto/operations'
+import { T } from './mock'
+
 
 interface ViewOps{
 	id: string
@@ -40,6 +42,12 @@ export const History = observer(function History() {
 		)
 	},[history, filter])
 	
+	useEffect(()=>{ 
+		setHistoryView(T
+			.sort((a,b) => sortOps(a,b))
+		)
+	},[])
+
 	function filterOps(op:Operation):Operation | undefined {
 		if(execRef.current?.checked && op.state.toString() === execRef.current?.value) return op
 		if(cancelRef.current?.checked && op.state.toString() === cancelRef.current?.value) return op
